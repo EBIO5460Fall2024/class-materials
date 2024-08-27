@@ -1,4 +1,4 @@
-### Week 1: Preclass homework for Wednesday
+### Week 1: Preclass homework for Thursday
 1. If you haven't done so for a while, update R and RStudio to the latest versions.
    * R: https://cran.r-project.org/
    * RStudio desktop free: https://www.rstudio.com/products/rstudio/download/
