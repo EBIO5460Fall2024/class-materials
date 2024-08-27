@@ -82,7 +82,7 @@ Please upgrade to the latest versions of R and R Studio.
 
 #### Texts
 
-This class is a mash up and I will sample from several texts. You don't need to purchase any of these texts. Most of it is available free to you but not all of the textbook material can be posted publicly. Relevant sections will be posted to the class Google Drive folder.
+This class is a mash up and I will sample from several texts. You don't need to purchase any of these texts. Most of it is available free to you but not all of the textbook material can be posted publicly. Relevant sections will be posted to the class Google Drive folder (see GitHub for link).
 
 The texts I will draw most heavily from and will be most useful are:
 
