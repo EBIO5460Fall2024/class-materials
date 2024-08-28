@@ -8,8 +8,10 @@ We will address rationale and usage later.\
 Prerequisite: RStudio installed and up to date.
 
 ## Register a GitHub account
+You can use your existing account or sign up here:
+
 https://github.com/ \
-Use your colorado.edu email.\
+I suggest using your colorado.edu email but you don't have to.\
 Email me your GitHub username so I can add you to the class's GitHub organization.
 
 ## Install Git
