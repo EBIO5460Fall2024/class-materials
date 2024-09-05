@@ -89,7 +89,7 @@ Fix the code in (Q2)  using a double selection structure. Which option works bes
 
 ##### Question 4
 
-Where should I put braces and indents? Modify the following code to produce the patterns shown in tables (a) and (b) depending on the input. You may not make any changes other than indentation or inserting braces. Your answer should be clear, readable code with good style. Hint: you have to decide when to stack or nest the selection structures.
+Where should I put braces and indents? Modify the following code to produce the patterns shown in tables (a) and (b) depending on the input. You may not make any changes other than indentation or inserting braces (you can include a new line with a closing brace). Your answer should be clear, readable code with good style. Hint: you have to decide when to stack or nest the selection structures.
 
 ```R
 pattern <- NULL
