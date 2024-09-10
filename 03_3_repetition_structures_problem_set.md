@@ -87,7 +87,7 @@ Hints:
 
 ### Question 3
 
-Write an algorithm to print all the numbers less than 1000 in the Fibonacci sequence. The first two numbers in the Fibonacci sequence are 0 and 1, and each subsequent number is the sum of the previous two. Hint: should you use sentinel or counter controlled repetition?
+Write an algorithm to print all the numbers less than 100,000 in the Fibonacci sequence. The first two numbers in the Fibonacci sequence are 0 and 1, and each subsequent number is the sum of the previous two. Hint: should you use sentinel or counter controlled repetition?
 
 ### Question 4
 
