@@ -8,3 +8,4 @@
 * Pseudocode
 * Top down refinement
 
+You can ignore the 30 secs at the beginning that mentions reading on the design matrix (I didn't want you to read it yet)
