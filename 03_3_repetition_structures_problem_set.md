@@ -48,7 +48,7 @@ In the previous homework you came up with an algorithm to find a number (y) that
 
 # Initialize parameters
 x <- 3.2    #Any real number
-z <- 2      #Any integer > 0
+b <- 2      #Any integer > 0
 
 # Initialize working variables
 y <- 1
@@ -62,7 +62,7 @@ for ( counter in 1:b ) {
 y
 ```
 
-Does it work correctly for integer z = 0 (try it out)? If not, fix it so integer z = 0 will work correctly with a **for** structure. 
+Does it work correctly for integer b = 0 (try it out)? If not, fix it so integer b = 0 will work correctly with a **for** structure. 
 
 Hints: 
 
