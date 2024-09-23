@@ -1,68 +1,155 @@
 # Semester timetable
-This is the timetable we followed last year. This year at the start we'll interweave learning to program, so the exact details may change especially at the beginning.
+This is the timetable we followed last time but I will update it as we go along.
+
 
 
 ## Week 1
-* Intro to class and pretest
-* Homework: skills
-  * Get set up with Git and GitHub.
-* Homework: reading
-  * How algorithms unite data science
+
+* Intro to data science
+
+  * 3 cultures
+  * Models, algorithms, workflows
+  * Algorithm classes: model, training, inference
+
+* Productive programming tools
+
+  * IDEs, screen real estate, pseudocode, flowcharts
+
 * Structured programming
-* The inter-relation of hypotheses, models, and algorithms
-* 3 algorithm classes: model, training, inference
+
+* Sequence structure
+
+* Homework
+
+  * Skills: Get set up with Git and GitHub.
+
+  * Mini lecture: What is an algorithm?
+
+  * Reading: How algorithms unite data science
+
+
 
 ## Week 2
-* Homework: skills
-  * Git and GitHub: stage, commit, push, backtrack
-* Homework: reflection/analysis
-  * Linear regression workflow
-* Homework: mini lecture
-  * Algorithms in data science: 3 classes
-* Analysis workflows
-* Model algorithms intro
-  * Simple linear model in math and code
-  * Design matrix and parameterization
-  * Linear model shorthand
-* Homework: mini lecture
-  * Training algorithms intro
-* Class: Code a grid search training algorithm
+
+* Version control workflow
+
+* Designing algorithms
+
+* Selection structures
+
+  * Single: if
+  * Double: if/else
+  * Multiple: if/else if
+
+* Repetition structures
+
+  * Sentinel control: while
+  * Counter control: for i in 1:n
+  * Vector control: foreach element in vector
+
+* Stacking & nesting control structures
+
+* Homework
+
+  * Skills: Git and GitHub: stage, commit, push, backtrack
+
+  * Mini lecture: Selection structures
+
+  * Coding: Selection structures problem set
+  * Coding: sentinel and counter controlled repetition
+
+
 
 ## Week 3
-* Optimization algorithms
-  * Nelder-Mead simplex algorithm using `optim()`
-  * SSQ QR decomposition algorithm used in `lm()`
+* Repetition structures
+
+  * until, do-while, foreach object in list
+
+* Model algorithms
+
+  * Simple linear model in math and code
+
+  * Data generating process
+  * Stochastic processes
+  * Generating random numbers
+  * Design an algorithm for animal movement data
+
+* Training algorithms
+
+  * Vary model parameters to minimize distance from data
+  * Optimization: grid search
+  * Design a grid search algorithm for linear regression
+
+
+* Homework
+  * Mini lecture: Further repetition structures
+  * Mini lecture: 3 classes of algorithms
+  * Mini lecture: Intro to training algorithms
+  * Skills: Using code styles
+  * Coding: Repetition structures problem set
+
+
+
+
+## Week 4
+
+* Structured programming: Functions
+  * Making programs modular
+  * R syntax
+  * Scope
+* Training models general recipe
+  1. Biology function
+  2. Error function
+  3. Optimize
+* Training algorithms: optimization
+  * Descent methods: Nelder-Mead simplex algorithm using `optim()`
+  * Numerical/analytical methods: SSQ QR decomposition algorithm used in `lm()`
 * Inference algorithms intro
   * Inference problems/goals
+  * Statistical inference is about accuracy, reliability, uncertainty
   * Looking back or looking forward
   * Looking back: considering the ways data could have happened
 * Frequentist inference algorithms
-  * The sampling distribution algorithm - considering the ways a sample could have happened
+  * The sampling distribution algorithm considers the ways a sample could have happened
   * Plug in principle
-  * Inference algorithms for `lm()` simple linear model
   * Confidence intervals from the sampling distribution
   * Coverage algorithm
   * P-value algorithm
   * Prediction intervals
-* Homework:
-  * Coding optimization algorithms
-  * Coding confidence and prediction intervals
 
-## Week 4
+* Homework
 
-* Homework: skills
-  * Git and GitHub: branch, merge, amend, .gitignore, GUI
-  * Using code styles
-* Homework: reading
-  * Bootstrap algorithm
+  * Mini lecture: Optimization algorithms
+  * Mini lecture: Inference algorithms
+  * Reading: Sampling distribution
+  * Skills: Git and GitHub: amend, .gitignore, GUI
+
+  * Coding: grid search for linear model
+  * Coding: grid search training algorithm for mechanistic population growth model
+  * Coding: descent training algorithm for mechanistic population growth model
+
+
+
+## Week 5
+
+* Frequentist inference algorithm for prediction intervals
+
 * Bootstrap algorithm
+  * Plug in a computational sampling algorithm
   * Non-parametric, empirical, parametric
   * Bootstrapped confidence interval
   * Bootstrapped p-value
-* Homework: 
-  * Coding bootstrap algorithms
 
-## Week 5
+* Homework
+  * Mini lecture: frequentist inference algorithms for `lm()` simple linear model
+  * Reading: Bootstrap algorithm
+  * Skills: Git and GitHub: branch, merge
+  * Coding: confidence versus prediction intervals
+  * Coding: bootstrap algorithms
+
+  
+
+## Week 6
 
 * Homework: skills
   * Reproducible science
@@ -87,7 +174,7 @@ This is the timetable we followed last year. This year at the start we'll interw
 * Homework:
   * Coding likelihood intervals for the linear model
 
-## Week 6
+## Week 7
 
 * Homework: skills
   * Practice git branch and merge with your own code
@@ -106,7 +193,7 @@ This is the timetable we followed last year. This year at the start we'll interw
   * Prediction intervals
   * Inference for linear models
 
-## Week 7
+## Week 8
 
 * Homework: skills
   * Reproducible workflow
@@ -123,7 +210,7 @@ This is the timetable we followed last year. This year at the start we'll interw
   * McElreath Ch 8 problems
 * Class: ant species richness dataset
 
-## Week 8
+## Week 9
 
 * Homework: skills
   * Visualization
@@ -141,7 +228,7 @@ This is the timetable we followed last year. This year at the start we'll interw
   * Link functions
   * Data distributions in the exponential family
 
-## Week 9
+## Week 10
 
 * Homework: skills
   * Data manipulation with `dplyr`
@@ -150,7 +237,7 @@ This is the timetable we followed last year. This year at the start we'll interw
   * Bayesian analysis using `stan_glm()`
 
 
-## Week 10
+## Week 11
 
 * Homework: skills
   * Tidy data
@@ -175,7 +262,7 @@ Homework: reading
 
 * Radon multilevel case study (Gelman & Hill Ch 12)
 
-## Week 11
+## Week 12
 
 * Homework: skills
   * R markdown
@@ -188,7 +275,7 @@ Homework: reading
   * Alternative parameterizations
   * Credible and prediction intervals
 
-## Week 12
+## Week 13
 
 * Homework: skills
   * Using LaTeX to write equations
@@ -204,7 +291,7 @@ Homework: reading
   * Math and R formulae
   * Using `glmer()` and `stan_glmer()`
 
-## Week 13
+## Week 14
 
 * Homework: individual project
   * Fit multilevel model
@@ -216,7 +303,7 @@ Homework: reading
   * Multiscale experimental and sampling design (randomized blocks, split plots etc)
   * Grouping models for multilevel designs
 
-## Week 14
+## Week 15
 
 * Homework: individual project
   * Draft report
@@ -230,8 +317,6 @@ Homework: reading
 * Either individual meetings about project or maybe these topics:
   * Priors in multilevel models
   * Zero inflated models
-
-## Week 15
 
 * Fake data simulation of multilevel designs
 * Posterior predictive check in Bayesian (and potentially frequentist) models
