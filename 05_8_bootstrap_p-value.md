@@ -1,0 +1,164 @@
+Bootstrapped *p*-value
+================
+Brett Melbourne
+26 Sep 2024
+
+In this example, the task is to bootstrap a *p*-value for the slope
+$\beta_1$ of a linear model. While the example uses the simple linear
+model, this general algorithm can be applied to any kind of model.
+
+The general idea combines the definition of a *p*-value
+
+> The probability of a sample statistic as large **or larger** than the
+> one observed **given that some hypothesis is true**.
+
+with the sampling distribution algorithm. In the case of the *p*-value
+for $\beta_1$, we are sampling the distribution of $\beta_1$ (the sample
+statistic) from the full model, when the null model ($\beta_1$ = 0) is
+the data generating process (the hypothesis considered true).
+
+Algorithm:
+
+    Train full model (y = beta_0 + beta_1 * x + e)
+    Record estimated beta_1_hat and sigma_e_hat
+    Train null model (y = beta_0 + e)
+    Record estimated beta_0_hat
+    Repeat very many times
+        generate data from the null model
+        train the full model
+        record the estimated beta_1 (call this beta_1_boot)
+    Calculate the frequency beta_1_boot is as large or larger than beta_1_hat
+
+Now implementing this algorithm in R:
+
+Generate some fake data to work with. Your algorithm would use your own
+dataset. This example dataset has a loose linear relationship with large
+$\sigma_e$.
+
+``` r
+set.seed(11.5) #make example reproducible
+n <- 30  #size of dataset
+beta_0 <- 100 #true y intercept
+beta_1 <- 7 #true slope
+sigma_e <- 100  #true standard deviation of the errors
+x <- runif(n, min=0, max=25) #nb while we have used runif, x is not a random variable
+y <- beta_0 + beta_1 * x + rnorm(n, sd=sigma_e) #random sample of y from the population
+```
+
+Train full model (y = beta_0 + beta_1 \* x + e)
+
+``` r
+fit_m1 <- lm(y ~ x)
+```
+
+Visualize data with trained full model
+
+``` r
+plot(x, y, ylim=c(0, 300))
+abline(fit_m1)
+```
+
+![](05_8_bootstrap_p-value_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+Record estimated beta_1 and sigma_e
+
+``` r
+beta_1_hat <- coef(fit_m1)[2]
+var_e_hat <- sum(fit_m1$residuals ^ 2) / fit_m1$df.residual #residual variance
+sigma_e_hat <- sqrt(var_e_hat)
+```
+
+Train null model (y = beta_0 + e). `y ~ 1` specifies the intercept only
+model.
+
+``` r
+fit_m0 <- lm(y ~ 1)
+```
+
+Record estimated beta_0 for the null model
+
+``` r
+beta_0_null <- coef(fit_m0)[1]
+```
+
+Bootstrap algorithm
+
+``` r
+reps <- 10000
+beta_1_boot <- rep(NA, reps)
+for ( i in 1:reps ) {
+    
+#   generate data from the null model
+    y_boot <- beta_0_null + rnorm(n, mean=0, sd=sigma_e_hat)
+    
+#   train the full model
+    fit_m1_boot <- lm(y_boot ~ x)
+    
+#   record the estimated beta_1
+    beta_1_boot[i] <- coef(fit_m1_boot)[2]
+
+#   monitoring   
+    if ( i %% 1000 == 0 ) {
+        print(paste(100*i/reps, "%", sep=""))
+    }
+
+}
+```
+
+Calculate two-tailed *p*-value, which is the notion that the magnitude
+of the observed $\beta_1$ is at issue and not its specific sign, so we
+need to consider magnitudes of $\beta_1$ of either sign in the sampling
+distribution.
+
+``` r
+sum(abs(beta_1_boot) >= abs(beta_1)) / reps
+```
+
+    ## [1] 7e-04
+
+``` r
+#sum( beta_1_boot >= beta_1 | beta_1_boot <= -beta_1 ) / reps #equivalent
+```
+
+Visualize the bootstrap distribution.
+
+``` r
+hist(beta_1_boot, freq=FALSE, breaks=100, col="lightblue", main=
+         "Bootstrapped sampling distribution of beta_1, given null model")
+rug(beta_1_boot, ticksize=0.01)
+abline(v=beta_1_hat, col="red")
+abline(v=-beta_1_hat, col="red", lty=2)
+lines(seq(-10,10,0.1), dnorm(seq(-10,10,0.1), mean=0, sd=sd(beta_1_boot)))
+```
+
+![](05_8_bootstrap_p-value_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+As usual, the histogram shows the bootstrapped sampling distribution. I
+have added a rug plot, which puts a tickmark for each bootstrap
+replicate, useful here to visualize the tails. I have also added a solid
+red line to show the observed (fitted) value for $\beta_1$ and a dashed
+red line to show the value of $-\beta_1$ indicating a slope of the same
+magnitude but in the negative direction. Bootstrap samples outside these
+lines are the values “as large or larger than” the observed magnitude of
+$\beta_1$. I have also overlaid a Normal distribution on the histogram.
+We see that the sampling distribution for $\beta_1$ tends Normal, as
+expected from theory based on the assumptions of the null model.
+
+Compare our version of the bootstrap *p*-value to the classical
+*p*-value. It’s somewhat similar but smaller than the classical
+*p*-value for these data. The appropriate *p*-value is on line `x`.
+
+``` r
+summary(fit_m1)$coefficients
+```
+
+    ##              Estimate Std. Error  t value     Pr(>|t|)
+    ## (Intercept) 89.390631  23.333192 3.831050 0.0006597707
+    ## x            5.637969   1.974472 2.855432 0.0080064721
+
+Here we’ve used $\beta_1$ straight up as the test statistic in the
+bootstrap. If we instead use the *t* statistic (i.e. divide $\beta_1$ by
+its standard error), which matches the setup of the classical test, we
+find that the bootstrap *p*-value is almost identical to the classical
+test. These are both valid and correct *p*-values, just for different
+test statistics.
