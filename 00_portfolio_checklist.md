@@ -24,4 +24,11 @@ Below is a running checklist of all the homework marked as **push to GitHub** th
 - [ ] week 4 grid search training algorithm
 - [ ] week 4 grid search with an ecological (natural-process) model
 - [ ] week 4 descent algorithm for a natural-process model
+- [ ] week 5 lm confidence and prediction intervals
+- [ ] week 5 empirical bootstrap confidence intervals
+- [ ] week 6 lm bootstrap prediction intervals
+- [ ] week 6 McElreath C2, 7 problems (2E1-2E3, 2M4, 2M5, 2M7, 2H1) on counting the ways
+- [ ] week 6 likelihood intervals for linear model with your data
+- [ ] week 7 McElreath C2, 6 problems (2M1-2M3, 2H2-2H4) on using prior information
+- [ ] week 7 McElreath C4, 3 problems (4H1-4H3) on Bayesian Normal linear model
 
