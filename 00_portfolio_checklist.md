@@ -31,4 +31,5 @@ Below is a running checklist of all the homework marked as **push to GitHub** th
 - [ ] week 6 likelihood intervals for linear model with your data
 - [ ] week 7 McElreath C2, 6 problems (2M1-2M3, 2H2-2H4) on using prior information
 - [ ] week 7 McElreath C4, 3 problems (4H1-4H3) on Bayesian Normal linear model
-
+- [ ] week 8 McElreath C8, medium problems on using prior information
+- [ ] week 8 submitted in `.R` and `.md` formats
