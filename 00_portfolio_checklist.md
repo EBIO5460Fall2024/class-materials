@@ -33,3 +33,4 @@ Below is a running checklist of all the homework marked as **push to GitHub** th
 - [ ] week 7 McElreath C4, 3 problems (4H1-4H3) on Bayesian Normal linear model
 - [ ] week 8 McElreath C8, medium problems on using prior information
 - [ ] week 8 submitted in `.R` and `.md` formats
+- [ ] week 9 Rosenbluth algorithm submitted in `.R` and `.md` formats
