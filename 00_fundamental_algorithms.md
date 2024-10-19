@@ -74,7 +74,7 @@ Define function logistic_growth with arguments r, K, N_0, t
 
 
 
-## Grid search algorithm illustrated for linear SSQ
+## Grid search illustrated for linear SSQ
 
 Type: training
 
@@ -127,7 +127,7 @@ Optimize error_f with respect to theta given data
 
 
 
-## Sampling distribution algorithm (exact version)
+## Sampling distribution (exact version)
 
 Type: inference
 
@@ -140,7 +140,7 @@ plot sampling distribution (histogram) of the sample statistic
 
 
 
-## Sampling distribution algorithm (law of large numbers version)
+## Sampling distribution (law of large numbers version)
 
 Type: inference
 
@@ -153,7 +153,7 @@ plot sampling distribution (histogram) of the sample statistic
 
 
 
-## Sampling distribution algorithm for model parameters
+## Sampling distribution for model parameters
 
 Type: inference
 
@@ -167,7 +167,7 @@ plot sampling distribution (histogram) of parameter estimates
 
 
 
-## Confidence interval coverage algorithm
+## Confidence interval coverage
 
 Type: inference
 
@@ -181,7 +181,7 @@ calculate frequency true value is in the interval
 
 
 
-## Bootstrap algorithm (general version)
+## Bootstrap (general version)
 
 Type: inference
 
@@ -195,7 +195,7 @@ plot sampling distribution (histogram) of the parameter estimates
 
 
 
-## Non-parametric bootstrap algorithm for model parameters
+## Non-parametric bootstrap for model parameters
 
 Type: inference
 
@@ -209,7 +209,7 @@ plot sampling distribution (histogram) of the parameter estimates
 
 
 
-## Empirical bootstrap algorithm for model parameters
+## Empirical bootstrap for model parameters
 
 Type: inference
 
@@ -226,7 +226,7 @@ plot sampling distribution (histogram) of the parameter estimates
 
 
 
-## Parametric bootstrap algorithm for model parameters
+## Parametric bootstrap for model parameters
 
 Type: inference
 
@@ -291,7 +291,7 @@ for each combination of predictor variables
 
 
 
-## Bootstrap prediction interval algorithm  (e.g. parametric)
+## Bootstrap prediction interval (e.g. parametric)
 
 Type: inference
 
@@ -306,12 +306,11 @@ we now have the predictive distribution of the predicted quantity
 for each combination of predictor variables
     calculate PI from the predictive distribution using one method above
 ```
-
-DGP: data generating process
-
+where DGP is the data generating process
 
 
-## Bootstrap *p*-value algorithm  (e.g. linear model $H_0: \beta_1=0$)
+
+## Bootstrap *p*-value (e.g. linear model $H_0: \beta_1=0$)
 
 Type: inference
 
@@ -329,7 +328,7 @@ calculate the frequency beta_1_boot is as large or larger than beta_1_hat
 
 
 
-## Likelihood model algorithm (e.g. linear model)
+## Likelihood model (e.g. linear model)
 
 $$
 \begin{flalign}
@@ -351,9 +350,10 @@ y <- rnorm(n, mean=mu, sd=sigma)
 
 
 
-## Likelihood training algorithm
+## Likelihood training
 
 Likelihood for linear model:
+
 $$
 \begin{aligned}
 P(y|\theta) &= 
@@ -380,17 +380,17 @@ optim(p=start_pars, lm_nll, y=y, x=x)
 
 
 
-## Likelihood inference algorithm (general)
+## Likelihood inference (general)
 
 Type: inference
 
-Likelihood ratio of model 2 to model 1	
+Likelihood ratio of model 2 to model 1
+
 $$
 \begin{flalign}
 \frac{P(y|\theta_2)}{P(y|\theta_1} &&
 \end{flalign}
 $$
-
 
 ```
 for each pair of models in a set
@@ -400,27 +400,25 @@ judge the relative evidence for the models
 
 
 
-## Likelihood profiling algorithm for likelihood intervals
+## Likelihood profiling for intervals
 
 Type: inference
 
 Example: 1/8 likelihood interval for $\beta_1$ of the Normal linear model
-
-
-
 Likelihood ratio of $\beta_{1i}$ to $\beta_{1MLE}$:
+
 $$
 \begin{flalign}
-\frac{P(y|\beta_{1i})}{P(y|\beta_{1MLE}} &&
+\frac{P(y|\beta_{1i})}{P(y|\beta_{1MLE})} &&
 \end{flalign}
 $$
 
 ```
 make a grid of beta_1 values either side of beta_1[MLE]
 for each value of beta_1
-    optimize the negative log likelihood over the other parameters
-    beta_1[i] = minimum negative log likelihood
-    likelihood ratio = exp(beta_1[i] - beta_1[MLE])
+    optimize the log likelihood over the other parameters
+    ll_beta_1[i] = optimum log likelihood
+    likelihood ratio = exp(ll_beta_1[i] - ll_beta_1[MLE])
                      = P(y|beta_1[i]) / P(y|beta_1[MLE])
 plot the likelihood ratio against beta_1
 find the values of beta_1 for which likelihood ratio = 1/8
@@ -428,31 +426,118 @@ find the values of beta_1 for which likelihood ratio = 1/8
 
 
 
+## Bayesian posterior distribution (general)
+
+Type: inference
+
+```
+load data
+for each parameter value
+    unstandardized posterior = prior * likelihood
+calculate the total probability
+for each parameter value
+    posterior probability = unstandardized posterior / total probability
+plot posterior probability vs parameter values
+```
+
+
+
+## Bayesian posterior distribution (discrete parameter)
+
+Type: inference
+
+```
+load data
+for each parameter value
+    unstandardized posterior = prior * likelihood
+total probability = sum of unstandardized posteriors
+for each parameter value
+    posterior probability = unstandardized posterior / total probability
+plot posterior probability vs parameter values
+```
+
+
+
+## Bayesian posterior distribution (continuous parameter)
+
+Type: inference
+
+```
+load data
+define grid of parameter values
+for each parameter value
+    unstandardized posterior = prior * likelihood
+total probability = integral of unstandardized posterior function
+for each parameter value
+    posterior Pr density = unstandardized posterior / total probability
+plot posterior Pr density vs parameter values
+```
+
+
+
+## Bayesian posterior distribution (grid approximation)
+
+Type: inference
+
+```
+load data
+define grid of parameter values with resolution r
+for each parameter value
+    unstandardized posterior = prior * likelihood
+total probability = sum(unstandardized posteriors) * r
+for each parameter value
+    posterior Pr density = unstandardized posterior / total probability
+plot posterior Pr density vs parameter values
+```
+
+
+
+## MCMC sampling from posterior distribution (general algorithm)
+
+Type: training, inference
+
+```
+set starting value for parameter
+for many iterations
+    propose new value for parameter
+    calculate the probability of accepting the proposal:
+        P_accept = min(Pr(proposal) / Pr(current), 1)
+    accept proposal randomly with Bern(P_accept)
+plot posterior distribution (histogram) of parameter values
+```
+
+where `Pr()` = prior x likelihood
+
+
+
+## MCMC sampling from posterior distribution (Rosenbluth algorithm)
+
+aka Metropolis
+
+Type: training, inference
+
+```
+set maximum step size: max_d
+set starting value for parameter
+for many iterations
+    propose new value for parameter:
+        draw a random number from Unif(-max_d, max_d)
+        proposal = current parameter + draw
+    calculate the probability of accepting the proposal:
+        P_accept = min(Pr(proposal) / Pr(current), 1)
+    accept proposal randomly with Bern(P_accept)
+plot posterior distribution (histogram) of parameter values
+```
+
+where `Pr()` = prior x likelihood
+
+
+
 ## Coming up soon
-
-Bayesian posterior algorithm
-
-Type: inference
-
-
-
-Bayesian posterior grid approximation algorithm
-
-Type: inference
-
-
 
 Bayesian prediction interval algorithm
 
-Type: inference
-
-
-
-MCMC algorithm
-
-Metropolis Hastings
-
 HMC
 
-
+Leave one out influence algorithm
 
