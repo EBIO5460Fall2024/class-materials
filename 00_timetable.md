@@ -205,10 +205,9 @@ This is the timetable we followed last time but I will update it as we go along.
 * Further Bayesian topics
   * Choosing priors
   * Posteriors for derived quantities
-
 * Homework: coding
   * McElreath Ch 8 problems
-* Class: ant species richness dataset
+  * Coding the Rosenbluth (Metropolis) algorithm
 
 ## Week 9
 
@@ -216,6 +215,7 @@ This is the timetable we followed last time but I will update it as we go along.
   * Visualization
   * Theory and concepts behind ggplot
   * Using ggplot
+* Class: ant species richness dataset
 * Model diagnostics
   * Checking model assumptions
   * Assessing training robustness
