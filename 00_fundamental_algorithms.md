@@ -330,6 +330,7 @@ calculate the frequency beta_1_boot is as large or larger than beta_1_hat
 
 ## Likelihood model (e.g. linear model)
 
+Type: model
 $$
 \begin{flalign}
 y_i &\sim \mathrm{Normal}(\mu_i,\sigma) && \\
@@ -351,6 +352,8 @@ y <- rnorm(n, mean=mu, sd=sigma)
 
 
 ## Likelihood training
+
+Type: training
 
 Likelihood for linear model:
 
@@ -512,7 +515,7 @@ where `Pr()` = prior x likelihood
 
 ## MCMC sampling from posterior distribution (Rosenbluth algorithm)
 
-aka Metropolis
+aka Metropolis algorithm
 
 Type: training, inference
 

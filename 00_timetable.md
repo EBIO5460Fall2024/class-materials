@@ -215,26 +215,35 @@ This is the timetable we followed last time but I will update it as we go along.
   * Visualization
   * Theory and concepts behind ggplot
   * Using ggplot
-* Class: ant species richness dataset
-* Model diagnostics
-  * Checking model assumptions
-  * Assessing training robustness
-  * Residuals, influence, leverage, outliers, QQ plots, nonlinearity, non-constant variance
-  * Case deletion diagnostics for influence
-* Homework: coding
-  * Diagnostics for the naive ants linear model
+* The art of modeling
+  * Formulating and writing a model
+  * Making assumptions explicit
+  * Mapping science questions to models
+  * Scope of inference and data design
 
-* Generalized linear models (GLMs)
-  * Link functions
-  * Data distributions in the exponential family
 
 ## Week 10
 
 * Homework: skills
   * Data manipulation with `dplyr`
+
+* Homework: mini lectures
+  * Model checking
+  * R model formula syntax
+
+* Homework: coding
+  * Frequentist and likelihood diagnostics for the linear Normal model
+* Model checking
+  * Evaluating model assumptions
+  * Assessing training robustness
+  * Residuals, leverage, outliers, QQ plots, nonlinearity, non-constant variance
+  * Leave one out (case deletion) algorithm for influence
+* Generalized linear models (GLMs)
+  * Link functions
+  * Data distributions
 * GLMs: ant data case study
-  * Frequentist/likelihood analysis using `glm()`
-  * Bayesian analysis using `stan_glm()`
+  * Bayesian analysis using `ulam` and `stan_glm()`
+  * Frequentist/likelihood analysis using `glm()` and bootstrap
 
 
 ## Week 11
@@ -246,14 +255,12 @@ This is the timetable we followed last time but I will update it as we go along.
 * Data visualization
   * Exploratory data analysis of hierarchical data
   * Using `dplyr` and `ggplot`
-* Model formulae in R
-  * Shorthand notation for linear model design matrix
 * Introduction to multilevel models (Normal, linear)
   * Grouping variables
   * Fixed vs random effects
   * Partial pooling and shrinkage
   * Using `lmer()` and `stan_lmer()`
-* Workflow algorithm
+* Art of modeling and workflow algorithm
   * Sketch the data design
   * Write the equations
   * Linear model syntax
@@ -329,15 +336,14 @@ Homework: reading
 
 ## Where next?
 
-I am currently designing a full two-semester sequence of this course and am writing a textbook *Data Science for Ecology*. These topics will be covered in the book and a selection in future semesters and seminars:
+I am currently designing a full four-semester sequence of this course and am writing a textbook *Data Science for Ecology*. These topics will be covered in the book and a selection in future semesters and seminars:
 
-* Bayes factors
-* Permutation inference algorithms
-* rstan - beyond GLMMs, general hierarchical models
-* Machine learning (see my course website from [Spring 2022](https://github.com/EBIO5460Spring2022/class-materials))
-  * regression trees, random forest, boosting, neural networks & deep learning
-* Time series analysis
+* Machine learning (see my course website from [Spring 2024](https://github.com/EBIO5460Spring2024/class-materials))
+  * bagging, random forests, boosting, stochastic gradient descent, neural networks & deep learning
+* Functional & object oriented programming
+* Process modeling with data
+* rstan - beyond linear hierarchical models
+* Approximate Bayesian computation (ABC)
 * Spatio-temporal models
-* Structural equation models
 * Unsupervised learning (aka "multivariate statistics")
-* Ecological forecasting (see my course website from [Spring 2020](https://github.com/EBIO6100Spring2020/Class-materials))
+* Ecological forecasting and time series (see my course website from [Spring 2020](https://github.com/EBIO6100Spring2020/Class-materials))
