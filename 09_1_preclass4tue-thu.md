@@ -47,14 +47,14 @@ You made great progress on coding this in class. Group leaders please be sure to
 * To plot the posterior with good detail, make a histogram with lots of bins, e.g.
 
 * ```
-  hist(samples_5000$b0, breaks=100)
+  hist(samples$b0, breaks=100)
   ```
 
 * Calculate posterior means and credible intervals for the parameters (see McElreath Ch8).
 
 * Compare your parameter estimates and their credible intervals to your previous analyses with this dataset. You should get similar values.
 
-**Knit your .R file to a markdown report and push both `.R` and `.md` files to GitHub.**
+**Push `.R`  file to GitHub.**
 
 
 
