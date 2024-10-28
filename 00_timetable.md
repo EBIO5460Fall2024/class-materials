@@ -1,18 +1,16 @@
 # Semester timetable
-This is the timetable we followed last time but I will update it as we go along.
+Detailed topics for each week
 
 
 
 ## Week 1
 
 * Intro to data science
-
   * 3 cultures
   * Models, algorithms, workflows
   * Algorithm classes: model, training, inference
 
 * Productive programming tools
-
   * IDEs, screen real estate, pseudocode, flowcharts
 
 * Structured programming
@@ -20,11 +18,8 @@ This is the timetable we followed last time but I will update it as we go along.
 * Sequence structure
 
 * Homework
-
   * Skills: Get set up with Git and GitHub.
-
   * Mini lecture: What is an algorithm?
-
   * Reading: How algorithms unite data science
 
 
@@ -36,13 +31,11 @@ This is the timetable we followed last time but I will update it as we go along.
 * Designing algorithms
 
 * Selection structures
-
   * Single: if
   * Double: if/else
   * Multiple: if/else if
 
 * Repetition structures
-
   * Sentinel control: while
   * Counter control: for i in 1:n
   * Vector control: foreach element in vector
@@ -50,65 +43,61 @@ This is the timetable we followed last time but I will update it as we go along.
 * Stacking & nesting control structures
 
 * Homework
-
   * Skills: Git and GitHub: stage, commit, push, backtrack
-
   * Mini lecture: Selection structures
-
   * Coding: Selection structures problem set
-  * Coding: sentinel and counter controlled repetition
+  * Coding: Sentinel and counter controlled repetition
 
 
 
 ## Week 3
-* Repetition structures
 
+* Repetition structures
   * until, do-while, foreach object in list
 
 * Model algorithms
-
   * Simple linear model in math and code
-
   * Data generating process
   * Stochastic processes
   * Generating random numbers
   * Design an algorithm for animal movement data
 
 * Training algorithms
-
   * Vary model parameters to minimize distance from data
   * Optimization: grid search
   * Design a grid search algorithm for linear regression
 
-
 * Homework
+  * Skills: Using code styles
   * Mini lecture: Further repetition structures
   * Mini lecture: 3 classes of algorithms
   * Mini lecture: Intro to training algorithms
-  * Skills: Using code styles
   * Coding: Repetition structures problem set
-
 
 
 
 ## Week 4
 
-* Structured programming: Functions
+* Structured programming: functions
   * Making programs modular
   * R syntax
   * Scope
+
 * Training models general recipe
   1. Biology function
   2. Error function
   3. Optimize
+
 * Training algorithms: optimization
   * Descent methods: Nelder-Mead simplex algorithm using `optim()`
   * Numerical/analytical methods: SSQ QR decomposition algorithm used in `lm()`
+
 * Inference algorithms intro
   * Inference problems/goals
   * Statistical inference is about accuracy, reliability, uncertainty
   * Looking back or looking forward
   * Looking back: considering the ways data could have happened
+
 * Frequentist inference algorithms
   * The sampling distribution algorithm considers the ways a sample could have happened
   * Plug in principle
@@ -118,15 +107,13 @@ This is the timetable we followed last time but I will update it as we go along.
   * Prediction intervals
 
 * Homework
-
+  * Skills: Git and GitHub: amend, .gitignore, GUI
   * Mini lecture: Optimization algorithms
   * Mini lecture: Inference algorithms
   * Reading: Sampling distribution
-  * Skills: Git and GitHub: amend, .gitignore, GUI
-
-  * Coding: grid search for linear model
-  * Coding: grid search training algorithm for mechanistic population growth model
-  * Coding: descent training algorithm for mechanistic population growth model
+  * Coding: Grid search for linear model
+  * Coding: Grid search training algorithm for mechanistic population growth model
+  * Coding: Descent training algorithm for mechanistic population growth model
 
 
 
@@ -141,29 +128,15 @@ This is the timetable we followed last time but I will update it as we go along.
   * Bootstrapped p-value
 
 * Homework
-  * Mini lecture: frequentist inference algorithms for `lm()` simple linear model
-  * Reading: Bootstrap algorithm
   * Skills: Git and GitHub: branch, merge
-  * Coding: confidence versus prediction intervals
-  * Coding: bootstrap algorithms
+  * Mini lecture: Frequentist inference algorithms for `lm()` simple linear model
+  * Reading: Bootstrap algorithm
+  * Coding: Confidence versus prediction intervals
+  * Coding: Bootstrap algorithms
 
-  
+
 
 ## Week 6
-
-* Homework: skills
-  * Reproducible science
-  * Writing markdown documents
-* Homework: reading
-  * Pitfalls of p-values
-  * Conceptual foundations of likelihood
-  * Likelihood inference for the linear model
-
-* Homework: mini lecture
-  * Likelihood
-
-* Homework: problem set
-  * Likelihood problems from McElreath Ch 2
 
 * Likelihood inference
   * Conditional probability: P(y|theta)
@@ -171,21 +144,21 @@ This is the timetable we followed last time but I will update it as we go along.
   * Training algorithm: maximum likelihood
   * Inference algorithm: likelihood profiles
   * Pure likelihood intervals
-* Homework:
-  * Coding likelihood intervals for the linear model
+
+* Homework
+  * Skills: Reproducible science
+  * Skills: Writing markdown documents
+  * Mini lecture: Likelihood
+  * Reading: Pitfalls of p-values
+  * Reading: Conceptual foundations of likelihood
+  * Reading: Likelihood inference for the linear model
+  * Problem set: Likelihood problems from McElreath Ch 2
+  * Coding: Likelihood intervals for the linear model
+
+
 
 ## Week 7
 
-* Homework: skills
-  * Practice git branch and merge with your own code
-* Homework: reading and mini lecture
-  * Bayes' theorem, prior, posterior
-* Homework: problem set
-  * Bayesian problems from McElreath Ch 2
-* Homework: reading & active coding
-  * Bayesian model notation
-  * Bayesian inference algorithm
-  * Coding problems from McElreath Ch 4
 * Bayesian inference algorithms
   * Posterior sampling
   * Histograms as approximations to posterior distribution
@@ -193,146 +166,174 @@ This is the timetable we followed last time but I will update it as we go along.
   * Prediction intervals
   * Inference for linear models
 
+* Homework
+  * Skills: Practice git branch and merge with your own code
+  * Mini lecture & reading: Bayes' theorem, prior, posterior
+  * Problem set: Bayesian problems from McElreath Ch 2
+  * Reading & active coding:
+    * Bayesian model notation
+    * Bayesian inference algorithm
+    * Coding problems from McElreath Ch 4
+
+
+
 ## Week 8
 
-* Homework: skills
-  * Reproducible workflow
-  * Render an R script to markdown
 * MCMC algorithms for Bayesian training
-  * Metropolis-Hastings, Gibbs sampling, Hamiltonian Monte Carlo
+  * Rosenbluth-Metropolis-Hastings, Gibbs sampling, Hamiltonian Monte Carlo
   * Stan, rstan, rstanarm
   * MCMC diagnostics
+
 * Further Bayesian topics
   * Choosing priors
   * Posteriors for derived quantities
-* Homework: coding
-  * McElreath Ch 8 problems
-  * Coding the Rosenbluth (Metropolis) algorithm
+
+* Homework
+  * Skills: Reproducible workflow
+  * Skills: Render an R script to markdown
+  * Coding: McElreath Ch 8 problems
+  * Coding: Rosenbluth (Metropolis) algorithm
+
+
 
 ## Week 9
 
-* Homework: skills
-  * Visualization
-  * Theory and concepts behind ggplot
-  * Using ggplot
 * The art of modeling
   * Formulating and writing a model
   * Making assumptions explicit
   * Mapping science questions to models
   * Scope of inference and data design
 
+* Homework
+  * Skills: Visualization using ggplot
+  * Reading: Theory and concepts behind ggplot
+
+
 
 ## Week 10
 
-* Homework: skills
-  * Data manipulation with `dplyr`
-
-* Homework: mini lectures
-  * Model checking
-  * R model formula syntax
-
-* Homework: coding
-  * Frequentist and likelihood diagnostics for the linear Normal model
 * Model checking
   * Evaluating model assumptions
   * Assessing training robustness
   * Residuals, leverage, outliers, QQ plots, nonlinearity, non-constant variance
   * Leave one out (case deletion) algorithm for influence
+
 * Generalized linear models (GLMs)
   * Link functions
   * Data distributions
+
 * GLMs: ant data case study
   * Bayesian analysis using `ulam` and `stan_glm()`
   * Frequentist/likelihood analysis using `glm()` and bootstrap
 
+* Homework
+  * Skills: Data manipulation with `dplyr`
+  * Mini lecture: Model checking
+  * Mini lecture: R model formula syntax
+  * Coding: Frequentist and likelihood diagnostics for the linear Normal model
+
+
 
 ## Week 11
 
-* Homework: skills
-  * Tidy data
-* Homework: individual project
-  * Preproposal
-* Data visualization
-  * Exploratory data analysis of hierarchical data
-  * Using `dplyr` and `ggplot`
 * Introduction to multilevel models (Normal, linear)
   * Grouping variables
   * Fixed vs random effects
   * Partial pooling and shrinkage
   * Using `lmer()` and `stan_lmer()`
+
+* Data visualization
+  * Exploratory data analysis of hierarchical data
+  * Using `dplyr` and `ggplot`
+
 * Art of modeling and workflow algorithm
   * Sketch the data design
   * Write the equations
   * Linear model syntax
 
-Homework: reading
+* Homework
+  * Skills: Tidy data
+  * Reading: Radon multilevel case study (Gelman & Hill Ch 12)
+  * Individual project: Preproposal
 
-* Radon multilevel case study (Gelman & Hill Ch 12)
+
 
 ## Week 12
 
-* Homework: skills
-  * R markdown
-* Homework: individual project
-  * Project proposal
-  * Begin EDA using dplyr and ggplot
 * Radon multilevel case study
   * Likelihood and Bayesian algorithms
   * Predictor variables at different scales
   * Alternative parameterizations
   * Credible and prediction intervals
 
+* Homework
+  * Skills: R markdown
+  * Individual project: Project proposal
+  * Individual project: Begin EDA using dplyr and ggplot
+
+
+
 ## Week 13
 
-* Homework: skills
-  * Using LaTeX to write equations
-* Homework: individual project
-  * Modeling predictors at different scales
-    * Scales of grouping & predictor variables
-    * Sketch data structure, write math, write R model formulae
-* Multiple nested scales: math and R formulae
-* How multilevel models account for autocorrelation
-* Generalized linear mixed models (GLMM)
-* Accounting for overdispersion using multilevel models
-* Case study: revisiting the ants data as multilevel
+* Multilevel models
+  * Math and R formulae for multiple nested scales
+  * How multilevel models account for autocorrelation
+  * Generalized linear mixed models (GLMM)
+  * Accounting for overdispersion using multilevel models
+
+* Case study: revisiting the ants data with multilevel structure
   * Math and R formulae
   * Using `glmer()` and `stan_glmer()`
 
+* Homework
+  * Skills: Using LaTeX to write equations
+  * Individual project: Modeling predictors at different scales
+    * Scales of grouping & predictor variables
+    * Sketch data structure, write math, write R model formulae
+
+
+
 ## Week 14
 
-* Homework: individual project
-  * Fit multilevel model
-* Homework: reading & exercises
-  * Experimental design
-* Binomial GLMM
+* Binomial multilevel model, GLMM
+
 * Study design: experimental design and sampling design
   * Replication, randomization, control
   * Multiscale experimental and sampling design (randomized blocks, split plots etc)
   * Grouping models for multilevel designs
 
+* Homework
+  * Individual project: Fit multilevel model
+  * Reading & exercises: Experimental design
+
+
+
 ## Week 15
 
-* Homework: individual project
-  * Draft report
-* Homework: reading
-  * Cross validation
-  * Model selection
 * Model selection from various perspectives (frequentist, Bayesian, IC)
   * CV, AIC, BIC, WAIC, LOOIC
+
 * Introduction to machine learning
   * Cross validation algorithm
+
 * Either individual meetings about project or maybe these topics:
   * Priors in multilevel models
   * Zero inflated models
 
 * Fake data simulation of multilevel designs
+
 * Posterior predictive check in Bayesian (and potentially frequentist) models
-* Leave-one-out influence check
-* Homework: individual project
-  * Advanced diagnostics
+
+* Homework
+  * Individual project: Advanced model checking
     * Fake data simulation
     * Posterior predictive check
     * LOO influence check
+  * Individual project: Draft report
+  * Reading: Cross validation
+  * Reading: Model selection
+
+
 
 ## Where next?
 
@@ -340,9 +341,9 @@ I am currently designing a full four-semester sequence of this course and am wri
 
 * Machine learning (see my course website from [Spring 2024](https://github.com/EBIO5460Spring2024/class-materials))
   * bagging, random forests, boosting, stochastic gradient descent, neural networks & deep learning
-* Functional & object oriented programming
-* Process modeling with data
-* rstan - beyond linear hierarchical models
+* Functional & object-oriented programming
+* Process modeling with data (course scheduled Spring 2026, last taught as [QEE 2017](https://www.colorado.edu/lab/melbourne/courses))
+* Stan: beyond linear hierarchical models
 * Approximate Bayesian computation (ABC)
 * Spatio-temporal models
 * Unsupervised learning (aka "multivariate statistics")
