@@ -82,11 +82,6 @@ plot(ant$latitude, sr, col=ant$habitat_f, ylab="Residuals", xlab="Latitude",
 abline(h=0, col="gray")
 
 
-
-
-
-
-
 # ---Model check 5. Histogram of residuals assessed against theoretical distribution
 hist(r, xlab="Residuals", main="Histogram of residuals", freq=FALSE)
 rseq <- seq(min(r), max(r), length.out=100)
@@ -95,6 +90,7 @@ lines(rseq, dnorm(rseq, mean=0, sd=sigma), col="blue")
 # ---Model check 6. Quantile-quantile plot
 qqnorm(r)
 qqline(r)
+
 
 # ---Model check 7. Influence of individual points
 
@@ -160,7 +156,62 @@ plot(fit_lm, 3)
 plot(fit_lm, 4)
 
 
+# Let's consider the alternative model with a log(richness) transformation, this
+# time with lm tools for brevity
+fit_lm_log <- lm(log(richness) ~ latitude + habitat_f + latitude:habitat_f, data=ant)
+predictions$habitat_f <- factor(predictions$habitat)
+predictions$log_richness <- predict(fit_lm_log, newdata=predictions)
+predictions$richness_bt <- exp(predictions$log_richness)
 
+# Plot model with the data, both on log and natural scales
+ggplot(NULL, aes(col=habitat)) +
+    geom_point(data=ant,         aes(x=latitude, y=log(richness))) +
+    geom_line( data=predictions, aes(x=latitude, y=log_richness)) 
 
+ggplot(NULL, aes(col=habitat)) +
+    geom_point(data=ant,         aes(x=latitude, y=richness)) +
+    geom_line( data=predictions, aes(x=latitude, y=richness_bt)) +
+    ylim(0, 18)
+
+# Other model checks. We see that residuals are better behaved and the problem
+# with case 25 is reduced.
+
+# Residuals vs fitted
+plot(fit_lm_log, 1)
+
+# Scale-location plot
+plot(fit_lm_log, 3)
+
+# Residuals vs latitude
+r <- fit_lm_log$residuals
+plot(ant$latitude, r, col=ant$habitat_f, ylab="Residuals", xlab="Latitude",
+     main="Residuals vs latitude")
+abline(h=0, col="gray")
+
+# QQ plot
+plot(fit_lm_log, 2)
+
+# Histogram of residuals
+hist(r, xlab="Residuals", main="Histogram of residuals", freq=FALSE)
+rseq <- seq(min(r), max(r), length.out=100)
+lines(rseq, dnorm(rseq, mean=0, sd=sd(r)), col="blue")
+
+# LOO influence
+plot(fit_lm_log, 4)
+
+# How do we know what to expect? We can simulate a bunch of datasets
+# from the model, fit new models and check their diagnostics.
+op <- par(no.readonly = TRUE)
+par(mfrow=c(4,5))
+for ( i in 1:20 ) {
+    simdat <- cbind(ant, simulate(fit_lm_log))
+    simfit <- lm(sim_1 ~ latitude + habitat_f + latitude:habitat_f, data=simdat)
+  #  plot(simfit, 3)
+    r <- simfit$residuals
+    hist(r, xlab="Residuals", main="Histogram of residuals", freq=FALSE)
+    rseq <- seq(min(r), max(r), length.out=100)
+    lines(rseq, dnorm(rseq, mean=0, sd=sd(r)), col="blue")
+}
+par(op)
 
 
