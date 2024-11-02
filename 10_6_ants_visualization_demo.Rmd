@@ -1,82 +1,113 @@
-# Class demo
+---
+title: "Visualization with the ants data"
+author: Brett Melbourne
+date: 2024-10-29
+output:
+    github_document
+---
+
+```{r}
 library(ggplot2)
 library(scales) #for ggplot color palette in function hue_pal
+```
 
-# Read in the data:
-ant <- read.csv("../class-materials/data/ants.csv")
+Read in the data:
+
+```{r}
+ant <- read.csv("data/ants.csv")
 ant$habitat <- factor(ant$habitat)
+```
 
+In the style of base plot.default
 
-# About factors
-class(ant$habitat)
-levels(ant$habitat)
-ant$habitat
-as.numeric(ant$habitat)
-
-
-# plot.default style
+```{r}
 plot(ant$latitude, ant$richness, col=ant$habitat)
 legend("topright", levels(ant$habitat), pch=1, col=1:2)
+```
 
+In the style of base plot.formula
 
-# plot.formula style
+```{r}
 plot(richness ~ latitude, col=habitat, data=ant)
 legend("topright", levels(ant$habitat), pch=1, col=1:2)
+```
 
 
-# Using with() to specify the dataframe
+Using with() to specify the dataframe
+
+```{r}
 with(ant, plot(latitude, richness, col=habitat))
 with(ant, legend("topright", levels(habitat), pch=1, col=1:2))
+```
 
-# Or
 
+Or, for multiline plotting code
+
+```{r}
 with(ant,
 {
     plot(latitude, richness, col=habitat)
     legend("topright", levels(habitat), pch=1, col=1:2)
 }
 )
+```
 
-# Red blue provides greater contrast
+Red-blue provides more consistent separation
+
+```{r}
 show_col(palette.colors(palette="R4"))
 rd_bl <- palette.colors(palette="R4")[c(2,4)]
 plot(ant$latitude, ant$richness, col=rd_bl[ant$habitat])
 legend("topright", levels(ant$habitat), pch=1, col=rd_bl)
+```
 
 
-# The Okabe-Ito palette is colorblind friendly
+The Okabe-Ito palette is colorblind friendly
+
+```{r}
 show_col(palette.colors(palette="Okabe-Ito"))
 cb_pal <- palette.colors(palette="Okabe-Ito")[c(7,3)]
 plot(ant$latitude, ant$richness, col=cb_pal[ant$habitat])
 legend("topright", levels(ant$habitat), pch=1, col=cb_pal)
+```
 
+ggplot default color palette
 
-# ggplot default color palette
+```{r}
 ggc <- pal_hue(h=c(0,360)+15, c=100, l=65, h.start=0, direction=1)
 show_col(ggc(2))
 show_col(ggc(6))
+```
 
+Base plot with ggplot colors
 
-# Base plot with the same colors as ggplot
+```{r}
 plot(ant$latitude, ant$richness, col=ggc(2)[ant$habitat])
 legend("topright", levels(ant$habitat), pch=1, col=ggc(2))
+```
 
 
-# Nicer position for the legend (outside data panel)
+Nicer position for the legend (outside data panel)
+
+```{r}
 plot(ant$latitude, ant$richness, col=ggc(2)[ant$habitat])
 legend("top", levels(ant$habitat), pch=1, col=ggc(2),
        bty="n", horiz=TRUE, inset=-0.1, xpd=NA)
+```
 
+Add a grid
 
-# Add a grid
+```{r}
 plot(ant$latitude, ant$richness, col=ggc(2)[ant$habitat],
      panel.first=grid(col="gray90", lty=1, lwd=0.5))
 legend("top", levels(ant$habitat), pch=1, col=ggc(2),
        bty="n", horiz=TRUE, inset=-0.1, xpd=NA)
+```
 
 
-# Base plot with minimal grammar of graphics logic
-#
+Base plot with simple grammar of graphics logic
+
+```{r}
 with( ant,
 {
     # Set up coordinate system with default x and y scales for the data
@@ -91,17 +122,20 @@ with( ant,
            horiz=TRUE, inset=-0.1, xpd=NA)
 }
 )
+```
 
 
-# Base plot with expanded grammar of graphics logic. These details were chosen
-# to make the data clearer:
-# 1. minor tick marks to highlight the discrete data
-# 2. filled circles for greater visibility and
-# 3. points with partial transparency to alleviate overlap
-# 4. axis includes and starts at zero to judge relative species richness
-# 5. more informative axis titles
-# 6. legend on top to take up less column space (more room for data)
-#
+Base plot with expanded grammar of graphics logic. These details were chosen
+to make the data clearer:
+
+* minor tick marks to highlight the discrete data
+* filled circles for greater visibility
+* points with partial transparency to alleviate overlap
+* y axis includes and starts at exactly zero to judge relative species richness
+* more informative axis titles
+* legend on top to take up less column space (more room for data) and reduce lookup effort
+
+```{r}
 with( ant,
 {
     # Set up coordinate system with explicit x and y scales for the data
@@ -128,34 +162,48 @@ with( ant,
     mtext("Ant species richness", 2, line=2.5)
 }
 )
+```
 
 
-# Using ggplot with explicit mapping
+Using ggplot with explicit mapping
+
+```{r}
 ggplot(data=ant) + 
     geom_point(mapping=aes(x=latitude, y=richness, col=habitat))
+```
 
 
-# Adding black and white theme
+Adding black and white theme
+
+```{r}
 ggplot(data=ant) + 
     geom_point(mapping=aes(x=latitude, y=richness, col=habitat)) +
     theme_bw()
+```
 
 
-# Minimal ggplot syntax with layer inheritance
+Minimal ggplot syntax with layer inheritance
+
+```{r}
 ggplot(ant, aes(latitude, richness, col=habitat)) + 
     geom_point() +
     theme_bw()
+```
 
 
-# Faceting by habitat
-ggplot(ant, aes(x=latitude, y=richness)) + 
+Faceting by habitat
+
+```{r}
+ggplot(ant, aes(x=latitude, y=richness, col=habitat)) + 
     geom_point() +
     facet_wrap(vars(habitat)) +
     theme_bw()
+```
 
 
-# Controlling marks, scales, legends, annotations
-# Same modifications as base plot previously
+Controlling marks, scales, legends, annotations (same modifications as base plot previously)
+
+```{r}
 ggplot(ant, aes(x=latitude, y=richness, col=habitat)) + 
     geom_point(size=2, alpha=0.75) +
     scale_y_continuous(breaks=seq(0, 20, 5),
@@ -172,3 +220,4 @@ ggplot(ant, aes(x=latitude, y=richness, col=habitat)) +
           axis.minor.ticks.length=rel(0.5),
           legend.position="top",
           legend.title=element_blank())
+```
