@@ -6,6 +6,8 @@ output:
     github_document
 ---
 
+First in a series of scripts to analyze the ant data described in Ellison (2004). This script demonstrates some visualization approaches with the data, including applying a grammar of graphics logic with base plot (and any other graphic tools) and `ggplot2`.
+
 ```{r}
 library(ggplot2)
 library(scales) #for ggplot color palette in function hue_pal
@@ -172,6 +174,7 @@ ggplot(data=ant) +
     geom_point(mapping=aes(x=latitude, y=richness, col=habitat))
 ```
 
+This is an attractive and effective default plot. There is a grid to aid judging distance on a common scale, a color scale with high effectiveness at distinguishing between categories, filled points and a grey background to help the points pop, and an automatic legend placed outside of the plotting area.
 
 Adding black and white theme
 

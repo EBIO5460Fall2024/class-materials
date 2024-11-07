@@ -3,6 +3,15 @@ Model checking for two models of the ants data
 Brett Melbourne
 2024-10-29
 
+Second in a series of scripts to analyze the ant data described in
+Ellison (2004). This script includes basic linear models of raw and
+log-transormed richness trained by both likelihood and SSQ, and model
+checking approaches that can be applied to a wide variety of likelihood
+models plus equivalent specialist tools provided in the base R `stats`
+package for fits using `lm()`. Future scripts will consider more
+alternative models for these data, using a variety of training and
+inference algorithms.
+
 ``` r
 library(ggplot2)
 ```
