@@ -1,0 +1,263 @@
+---
+title: Ant data Generalized Linear Model - Bayesian
+author: Brett Melbourne
+date: 16 Oct 2018 (updated 6 Nov 2024)
+output: github_document
+---
+
+Fourth? in a series of scripts to analyze the ant data described in Ellison (2004). This script includes Bayesian inference from the GLM. Future scripts will consider multilevel models to fully account for the design structure.
+
+This script can be rendered to a reproducible report.\
+`rmarkdown::render("09_8_ants_bayesian_GLM.Rmd")`, or *Ctrl+Shift+K* in RStudio.
+
+Set up for Bayesian analysis (order is important):
+
+```{r results=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+library(rstanarm)
+library(bayesplot)
+options(mc.cores=parallel::detectCores())
+source("source/hpdi.R") #hpdi() for calculating credible intervals
+theme_set(theme_bw())
+```
+
+Read in the data
+
+```{r}
+ant <- read.csv("data/ants.csv")
+ant$habitat <- factor(ant$habitat)
+```
+
+## Model
+
+The model and data were described in the previous script.
+
+
+## Training
+
+Bayesian fit with `rstanarm`
+```{r}
+bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude, 
+                      family=poisson, data=ant)
+```
+
+We obtain a `summary()` in the same way as many other analyses in R, which will display estimates for the parameters along with their uncertainty.
+
+```{r}
+summary(bysfitHxL, digits=4)
+```
+
+In this table, we can look at the posterior sample means (`Estimates: mean`) for a point estimate of the parameter values. The standard deviation (`Estimates: sd`) of the posterior samples is one measure of uncertainty. Twice the standard deviation is roughly a 95% credible interval assuming the posterior distribution is Normal. We can compare the mean to the median (`Estimates: 50%`, the 50th percentile of the posterior samples) and the 10th to the 90th percentiles of the samples to have a sense of the symmetry of the posterior distribution. The range between the 10th and 90th percentiles is another measure of uncertainty (80% CPI by default).
+
+Under `MCMC diagnostics` we see especially that the `Rhat` values are all 1, indicating convergence, and `n_eff`, the effective number of samples, is quite good (1000+) for all parameters. The Monte Carlo standard error (`mcse`) is the amount of error contributed by the sampling algorithm. We'd like to see that be relatively small compared to the standard deviations (`sd`) of the parameters.
+
+The `mean_ppd` (mean of the posterior predictive distribution) is a quick check for gross problems with the fit. It's just the predicted mean of the response. Compare this to the observed mean of the data. They should be in a similar ballpark. Here, `mean_ppd` is very close to the observed mean.
+
+```{r}
+mean(ant$richness)
+```
+
+### Working with posterior samples
+
+We already looked at working with the samples directly in a previous script. If you ever need to work with the samples from an `rstanarm` fit directly, you can get them with `as.matrix()`, `as.data.frame()`, or `as.array()`. These are the post-warmup samples. The warmup samples are not saved. For the combined chains (stacked but not shuffled):
+
+```{r}
+samples <- as.data.frame(bysfitHxL)
+head(samples, 3)
+samples |>
+    ggplot() +
+    geom_histogram(aes(x=habitatforest), bins=75)
+```
+
+Or for the separate chains:
+
+```{r}
+chains <- as.array(bysfitHxL)
+str(chains)
+ggplot() +
+    geom_line(mapping=aes(x=1:1000, y=chains[,"chain:1","habitatforest"])) +
+    labs(x="Iteration", y="habitatforest", title = "Chain 1")
+```
+
+Nevertheless, it would be rare to need to access chains directly because we can use various convenience functions provided by `rstanarm` for model checking. See the next script for Bayesian model checking.
+
+
+### Visualizing posterior samples with convenience functions
+
+See `?plot.stanreg` for information.
+
+```{r}
+plot(bysfitHxL, "intervals")
+```
+
+```{r}
+plot(bysfitHxL, "hist", bins=75)
+```
+
+```{r}
+plot(bysfitHxL, "trace")
+```
+
+All of these `plot` methods implement functions from the `bayesplot` package, which one could use alternatively. Since `plot` only accepts the fitted object (here `bysfitHxL`), the `bayesplot` plotting functions are more versatile because they can accept a wider range of inputs. Here is the 'bayesplot` call for the previous traceplot but using as input the chains extracted from the stanfit object (the plot, not shown, is identical).
+
+```{r eval=FALSE}
+mcmc_trace(chains)
+```
+
+The documentation for `bayesplot` is at https://mc-stan.org/bayesplot/index.html.
+
+
+## Inference
+
+Extracting and calculating everything manually from the samples is a lot of coding work. The convenience functions in `rstanarm` make inference tasks easier for common inferences. Calculating common derived quantities and their uncertainty, such as regression curves, is straightforward and not too much harder for most other derived quantities. We look at some of these next.
+
+
+### Parameter credible intervals
+
+The intervals provided by `rstanarm` are central posterior intervals (CPI) as the authors argue this is most appropriate for the types of models and parameters covered by `rstanarm`. Here is the convenience function for the parameter CPIs, which are 90% intervals by default:
+
+```{r}
+posterior_interval(bysfitHxL)
+```
+
+There is a strong argument for using the CPI in these GLMs in lieu of the highest posterior density interval (HPDI). We saw from the histograms above that the posteriors of the parameters are quite symmetric but there was still noise in the tails of the samples. Thus, the CPI is a more numerically stable estimate of the credible interval (even though the CPI is not strictly a credible interval itself) and the 90% interval is more stable. See `?posterior_interval` for more discussion.
+
+My inclination is always to do the more theoretically justified thing for later iterations of a model. So let's gather plenty of samples (e.g. 60K) to stabilize those tails. I'm not a statistician fitting hundreds of models a day 24/7/365. I'm a researcher with one dataset that I spent years collecting; I can wait another few seconds for a little more precision! (PS, the extra precision is not that important but it makes my plots less wiggly and visual beauty is a thing).
+
+```{r}
+bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude, 
+                      family=poisson, data=ant, warmup=1000, iter=16000)
+mcmc_hist(bysfitHxL, bins=75)
+```
+
+For comparison with our previous scripts, here are the 95% CPIs with the nice stable estimates
+
+```{r}
+posterior_interval(bysfitHxL, prob=0.95)
+```
+
+If we want HPDIs instead, we could calculate them directly from the samples, e.g. here using the `hpdi()` function from our class-materials `source` directory. These are not recommended without stabilizing the tails of the distribution, as we've done.
+
+```{r}
+samples <- as.data.frame(bysfitHxL)
+hpdi(samples$"(Intercept)", prob=0.95)
+hpdi(samples$habitatforest, prob=0.95)
+hpdi(samples$latitude, prob=0.95)
+hpdi(samples$"habitatforest:latitude", prob=0.95)
+```
+
+These are almost the same as the CPIs due to the symmetric posteriors. 
+
+
+### Convenience functions for derived samples
+
+As in the `predict()` function associated with `glm()`, convenience functions for samples of quantities derived from the model take a `newdat` argument that simplifies coding. The two workhorse functions are `posterior_linpred()` to calculate samples from the posterior distribution of derived quantities and `posterior_predict()` to generate samples from the posterior predictive distribution of derived quantities. These are analogous to the roles played by the confidence interval and the prediction interval in frequentist inference. To do what we did manually in the previous Bayesian script working directly with the samples, first make a dataframe with the desired values of the explanatory variables.
+
+```{r}
+newd <- data.frame(latitude=rep(seq(from=41.92, to=45, length.out=50), 2),
+                   habitat=factor(rep(c("bog","forest"), each=50)))
+```
+
+There are 100 combinations of latitude and habitat in this dataframe, 50 from bog and 50 from forest
+
+```{r}
+nrow(newd)
+newd[1:6,]   #some rows from bog
+newd[51:56,] #some rows from forest
+```
+
+Then, derive samples for the posterior distribution of the inverse link function, i.e. Dist($\mu$), which we'll call `pmu`.
+
+```{r message=FALSE, }
+pmu <- posterior_linpred(bysfitHxL, transform=TRUE, newdata=newd)
+#pmu <- posterior_epred(bysfitHxL, newdata=newd)
+```
+
+This is a matrix where each row is a sample from the posterior for each of the variable combinations in columns
+
+```{r}
+class(pmu)
+str(pmu)
+```
+
+Take a look at some of these samples to judge the shape and noisiness of the posterior
+
+```{r}
+mcmc_hist(pmu, pars=sample(colnames(pmu), 6), bins=75)
+```
+
+Some of these posterior distributions for mean richness seem somewhat skewed with a longer tail to the right, which makes sense because richness is constrained positive. I'm going to choose the HPDI here.
+
+
+The estimated expected values for $mu$ for each variable combination are then
+
+```{r}
+mnmu <- colMeans(pmu)
+```
+
+and the 95% credible intervals for the mean are
+
+```{r}
+n <- nrow(newd)
+mean_intervals <- data.frame(mulo95=rep(NA,n), muhi95=rep(NA,n))
+for ( i in 1:n ) {
+    mean_intervals[i,] <- hpdi(pmu[,i], prob=0.95)
+}
+```
+
+For predictions, first derive samples for the posterior predictive distribution, which we'll call ppd
+
+```{r}
+ppd <- posterior_predict(bysfitHxL, newdata=newd)
+str(ppd)
+mcmc_hist(ppd, pars=sample(colnames(ppd), 6), breaks=seq(-0.5,30.5))
+```
+
+and the 95% prediction intervals (here CPI for stability) are then
+
+```{r}
+prediction_intervals <- predictive_interval(ppd)
+prediction_intervals <- data.frame(prediction_intervals)
+names(prediction_intervals) <- c("ppdlo95", "ppdhi95")
+```
+
+
+Plot (code is the same as previous script)
+
+```{r}
+preds <- cbind(newd, mnmu, mean_intervals, prediction_intervals)
+bfc <- c("#d95f02", "#1b9e77") #bog & forest colors
+preds %>%
+    ggplot() +
+    geom_ribbon(mapping=aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
+                alpha=0.2) +
+    geom_point(data=ant, mapping=aes(x=latitude, y=richness, col=habitat)) +
+    geom_line(mapping=aes(x=latitude, y=mnmu, col=habitat)) +
+    geom_line(mapping=aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
+    geom_line(mapping=aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    annotate("text", x=42.7, y=3.3, label="Bog", col=bfc[1]) +
+    annotate("text", x=43.85, y=9.5, label="Forest", col=bfc[2]) +
+    scale_fill_manual(values=bfc) +
+    scale_color_manual(values=bfc) +
+    scale_y_continuous(breaks=seq(0, 20, 4), minor_breaks=seq(0, 20, 2)) +
+    xlab("Latitude (degrees north)") +
+    ylab("Ant species richness") +
+    theme(legend.position="none")
+```
+
+## Summary
+
+Comparing inference algorithms for frequentist and Bayesian approaches to model means and predictions so far:
+
+| Tool     | Mean                      | Uncertainty of mean       | Uncertainty of prediction |
+|:-----------------|:-----------------|:-----------------|:-----------------|
+| lm       | predict()                 | predict(int="confidence") | predict(int="prediction") |
+| glm      | predict(type= "response") | predict(se.fit=TRUE)      | via bootstrap             |
+|          |                           | or via bootstrap          |                           |
+| stan_glm | mean(pmu)                 | hpdi(pmu), cpi(pmu)       | hpdi(ppd), cpi(ppd)       |
+
+where:
+
+-   `pmu <- posterior_linpred(transform = TRUE)`, or `pmu <- posterior_epred()`
+-   `ppd <- posterior_predict()`
