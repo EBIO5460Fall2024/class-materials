@@ -5,12 +5,9 @@ date: 16 Oct 2018 (updated 6 Nov 2024)
 output: github_document
 ---
 
-Fourth? in a series of scripts to analyze the ant data described in Ellison (2004). This script includes Bayesian inference from the GLM. Future scripts will consider multilevel models to fully account for the design structure.
+Fifth in a series of scripts to analyze the ant data described in Ellison (2004). This script includes Bayesian inference from the Poisson log-link GLM using `stan_glm()` from `rstanarm` an analogue to the frequentist function `glm()` in the `stats` package of base R (considered in the previous script `ants_bayes_GLM_ulam_derived_quantities`). Here we consider especially the range of convenience functions in `rstanarm` to produce posterior samples of derived quantities and to check the model. Future scripts will consider multilevel models to fully account for the design structure.
 
-This script can be rendered to a reproducible report.\
-`rmarkdown::render("09_8_ants_bayesian_GLM.Rmd")`, or *Ctrl+Shift+K* in RStudio.
-
-Set up for Bayesian analysis (order is important):
+Set up for Bayesian analysis:
 
 ```{r results=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -31,18 +28,19 @@ ant$habitat <- factor(ant$habitat)
 
 ## Model
 
-The model and data were described in the previous script.
+The model and data were described in a previous Bayesian script where we used `ulam()` to train the model.
 
 
 ## Training
 
 Bayesian fit with `rstanarm`
-```{r}
+
+```{r results=FALSE, cache=TRUE}
 bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude, 
                       family=poisson, data=ant)
 ```
 
-We obtain a `summary()` in the same way as many other analyses in R, which will display estimates for the parameters along with their uncertainty.
+We obtain a `summary()` in the same way as most other common analyses in R, which will display estimates for the parameters along with their uncertainty.
 
 ```{r}
 summary(bysfitHxL, digits=4)
@@ -80,7 +78,7 @@ ggplot() +
     labs(x="Iteration", y="habitatforest", title = "Chain 1")
 ```
 
-Nevertheless, it would be rare to need to access chains directly because we can use various convenience functions provided by `rstanarm` for model checking. See the next script for Bayesian model checking.
+Nevertheless, it would be rare to need to access chains directly because we can use various convenience functions provided by `rstanarm` for model checking. See the next script for Bayesian model checking (`ants_bayes_model_check`).
 
 
 ### Visualizing posterior samples with convenience functions
@@ -125,7 +123,7 @@ There is a strong argument for using the CPI in these GLMs in lieu of the highes
 
 My inclination is always to do the more theoretically justified thing for later iterations of a model. So let's gather plenty of samples (e.g. 60K) to stabilize those tails. I'm not a statistician fitting hundreds of models a day 24/7/365. I'm a researcher with one dataset that I spent years collecting; I can wait another few seconds for a little more precision! (PS, the extra precision is not that important but it makes my plots less wiggly and visual beauty is a thing).
 
-```{r}
+```{r results=FALSE, cache=TRUE}
 bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude, 
                       family=poisson, data=ant, warmup=1000, iter=16000)
 mcmc_hist(bysfitHxL, bins=75)
@@ -171,7 +169,6 @@ Then, derive samples for the posterior distribution of the inverse link function
 
 ```{r message=FALSE, }
 pmu <- posterior_linpred(bysfitHxL, transform=TRUE, newdata=newd)
-#pmu <- posterior_epred(bysfitHxL, newdata=newd)
 ```
 
 This is a matrix where each row is a sample from the posterior for each of the variable combinations in columns
@@ -187,8 +184,7 @@ Take a look at some of these samples to judge the shape and noisiness of the pos
 mcmc_hist(pmu, pars=sample(colnames(pmu), 6), bins=75)
 ```
 
-Some of these posterior distributions for mean richness seem somewhat skewed with a longer tail to the right, which makes sense because richness is constrained positive. I'm going to choose the HPDI here.
-
+The panel header is the column number of the array (columns are different latitude/habitat combinations). Some of these posterior distributions for mean richness seem somewhat skewed with a longer tail to the right, which makes sense because richness is constrained positive. Thus, for intervals, I'm going to choose the HPDI here.
 
 The estimated expected values for $mu$ for each variable combination are then
 
@@ -196,7 +192,7 @@ The estimated expected values for $mu$ for each variable combination are then
 mnmu <- colMeans(pmu)
 ```
 
-and the 95% credible intervals for the mean are
+and the 95% credible intervals for the means are
 
 ```{r}
 n <- nrow(newd)
@@ -214,7 +210,7 @@ str(ppd)
 mcmc_hist(ppd, pars=sample(colnames(ppd), 6), breaks=seq(-0.5,30.5))
 ```
 
-and the 95% prediction intervals (here CPI for stability) are then
+We see from the selection of plots that the posterior predictive distribution is discrete (Poisson) because the data generating process is Poisson by assumption. The 95% prediction intervals (here CPI for stability) are then
 
 ```{r}
 prediction_intervals <- predictive_interval(ppd)
@@ -222,29 +218,37 @@ prediction_intervals <- data.frame(prediction_intervals)
 names(prediction_intervals) <- c("ppdlo95", "ppdhi95")
 ```
 
-
-Plot (code is the same as previous script)
+Gather all the derived quantities in the same data frame
 
 ```{r}
 preds <- cbind(newd, mnmu, mean_intervals, prediction_intervals)
+```
+
+
+Plot (code is the same as previous Bayesian script)
+
+```{r}
 bfc <- c("#d95f02", "#1b9e77") #bog & forest colors
-preds %>%
+preds |>
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
+    geom_ribbon(aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
                 alpha=0.2) +
-    geom_point(data=ant, mapping=aes(x=latitude, y=richness, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=mnmu, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
-    geom_line(mapping=aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=mnmu, col=habitat)) +
+    geom_line(aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_point(data=ant, aes(x=latitude, y=richness, col=habitat)) +
     annotate("text", x=42.7, y=3.3, label="Bog", col=bfc[1]) +
     annotate("text", x=43.85, y=9.5, label="Forest", col=bfc[2]) +
     scale_fill_manual(values=bfc) +
     scale_color_manual(values=bfc) +
     scale_y_continuous(breaks=seq(0, 20, 4), minor_breaks=seq(0, 20, 2)) +
+    coord_cartesian(ylim=c(0, 20)) +
     xlab("Latitude (degrees north)") +
     ylab("Ant species richness") +
     theme(legend.position="none")
 ```
+This is substantially similar to the inference from our `ulam` script and the frequentist analysis. However, the regression intervals and prediction intervals are narrower, presumably because the default priors are a little bit informative. We'll look at the priors next.
+
 
 ## Summary
 
@@ -259,5 +263,5 @@ Comparing inference algorithms for frequentist and Bayesian approaches to model 
 
 where:
 
--   `pmu <- posterior_linpred(transform = TRUE)`, or `pmu <- posterior_epred()`
+-   `pmu <- posterior_linpred(transform = TRUE)`
 -   `ppd <- posterior_predict()`

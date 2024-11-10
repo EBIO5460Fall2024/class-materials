@@ -3,16 +3,18 @@ Ant data Generalized Linear Model - Bayesian
 Brett Melbourne
 16 Oct 2018 (updated 6 Nov 2024)
 
-Fourth? in a series of scripts to analyze the ant data described in
-Ellison (2004). This script includes Bayesian inference from the GLM.
-Future scripts will consider multilevel models to fully account for the
-design structure.
+Fifth in a series of scripts to analyze the ant data described in
+Ellison (2004). This script includes Bayesian inference from the Poisson
+log-link GLM using `stan_glm()` from `rstanarm` an analogue to the
+frequentist function `glm()` in the `stats` package of base R
+(considered in the previous script
+`ants_bayes_GLM_ulam_derived_quantities`). Here we consider especially
+the range of convenience functions in `rstanarm` to produce posterior
+samples of derived quantities and to check the model. Future scripts
+will consider multilevel models to fully account for the design
+structure.
 
-This script can be rendered to a reproducible report.  
-`rmarkdown::render("09_8_ants_bayesian_GLM.Rmd")`, or *Ctrl+Shift+K* in
-RStudio.
-
-Set up for Bayesian analysis (order is important):
+Set up for Bayesian analysis:
 
 ``` r
 library(ggplot2)
@@ -33,7 +35,8 @@ ant$habitat <- factor(ant$habitat)
 
 ## Model
 
-The model and data were described in the previous script.
+The model and data were described in a previous Bayesian script where we
+used `ulam()` to train the model.
 
 ## Training
 
@@ -44,8 +47,8 @@ bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude,
                       family=poisson, data=ant)
 ```
 
-We obtain a `summary()` in the same way as many other analyses in R,
-which will display estimates for the parameters along with their
+We obtain a `summary()` in the same way as most other common analyses in
+R, which will display estimates for the parameters along with their
 uncertainty.
 
 ``` r
@@ -65,25 +68,25 @@ summary(bysfitHxL, digits=4)
     ## 
     ## Estimates:
     ##                          mean    sd      10%     50%     90%  
-    ## (Intercept)            13.4791  3.1696  9.5189 13.3793 17.5640
-    ## habitatforest           0.7469  2.9499 -3.0399  0.6871  4.5681
-    ## latitude               -0.2776  0.0742 -0.3732 -0.2755 -0.1853
-    ## habitatforest:latitude -0.0026  0.0690 -0.0918 -0.0015  0.0863
+    ## (Intercept)            13.5216  3.1721  9.4961 13.4317 17.5752
+    ## habitatforest           0.7859  2.9674 -3.1523  0.8184  4.6774
+    ## latitude               -0.2787  0.0742 -0.3733 -0.2767 -0.1849
+    ## habitatforest:latitude -0.0035  0.0695 -0.0939 -0.0043  0.0879
     ## 
     ## Fit Diagnostics:
     ##            mean   sd     10%    50%    90% 
-    ## mean_PPD 7.0336 0.5784 6.2955 7.0227 7.7727
+    ## mean_PPD 7.0156 0.5645 6.2955 7.0227 7.7500
     ## 
     ## The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help('summary.stanreg')).
     ## 
     ## MCMC diagnostics
     ##                        mcse   Rhat   n_eff
-    ## (Intercept)            0.0913 1.0020 1205 
-    ## habitatforest          0.1025 1.0046  829 
-    ## latitude               0.0021 1.0019 1196 
-    ## habitatforest:latitude 0.0024 1.0045  826 
-    ## mean_PPD               0.0114 1.0010 2596 
-    ## log-posterior          0.0365 1.0021 1458 
+    ## (Intercept)            0.0954 1.0022 1105 
+    ## habitatforest          0.1014 1.0020  857 
+    ## latitude               0.0022 1.0022 1098 
+    ## habitatforest:latitude 0.0024 1.0020  855 
+    ## mean_PPD               0.0102 0.9995 3037 
+    ## log-posterior          0.0404 1.0040 1088 
     ## 
     ## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).
 
@@ -131,9 +134,9 @@ head(samples, 3)
 ```
 
     ##   (Intercept) habitatforest   latitude habitatforest:latitude
-    ## 1    13.66350     -3.054780 -0.2840336             0.08940458
-    ## 2    15.66460     -3.108630 -0.3305627             0.09078269
-    ## 3    11.87179      2.328287 -0.2426403            -0.03763527
+    ## 1    13.14584    -0.4302242 -0.2708210             0.02333922
+    ## 2    14.90464    -0.2965332 -0.3100120             0.01956043
+    ## 3    12.56963    -4.1106559 -0.2565346             0.10924011
 
 ``` r
 samples |>
@@ -141,7 +144,7 @@ samples |>
     geom_histogram(aes(x=habitatforest), bins=75)
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Or for the separate chains:
 
@@ -150,7 +153,7 @@ chains <- as.array(bysfitHxL)
 str(chains)
 ```
 
-    ##  num [1:1000, 1:4, 1:4] 13.66 15.66 11.87 14.73 9.97 ...
+    ##  num [1:1000, 1:4, 1:4] 13.1 14.9 12.6 12.6 12.5 ...
     ##  - attr(*, "dimnames")=List of 3
     ##   ..$ iterations: NULL
     ##   ..$ chains    : chr [1:4] "chain:1" "chain:2" "chain:3" "chain:4"
@@ -162,11 +165,12 @@ ggplot() +
     labs(x="Iteration", y="habitatforest", title = "Chain 1")
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 Nevertheless, it would be rare to need to access chains directly because
 we can use various convenience functions provided by `rstanarm` for
-model checking. See the next script for Bayesian model checking.
+model checking. See the next script for Bayesian model checking
+(`ants_bayes_model_check`).
 
 ### Visualizing posterior samples with convenience functions
 
@@ -176,19 +180,19 @@ See `?plot.stanreg` for information.
 plot(bysfitHxL, "intervals")
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 plot(bysfitHxL, "hist", bins=75)
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 plot(bysfitHxL, "trace")
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 All of these `plot` methods implement functions from the `bayesplot`
 package, which one could use alternatively. Since `plot` only accepts
@@ -226,10 +230,10 @@ posterior_interval(bysfitHxL)
 ```
 
     ##                                5%        95%
-    ## (Intercept)             8.4458533 18.8398642
-    ## habitatforest          -4.1281469  5.6741464
-    ## latitude               -0.4026510 -0.1596420
-    ## habitatforest:latitude -0.1171129  0.1116471
+    ## (Intercept)             8.4441246 18.7972847
+    ## habitatforest          -4.1592400  5.6265062
+    ## latitude               -0.4024668 -0.1601560
+    ## habitatforest:latitude -0.1169251  0.1129022
 
 There is a strong argument for using the CPI in these GLMs in lieu of
 the highest posterior density interval (HPDI). We saw from the
@@ -254,7 +258,7 @@ bysfitHxL <- stan_glm(richness ~ habitat + latitude + habitat:latitude,
 mcmc_hist(bysfitHxL, bins=75)
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 For comparison with our previous scripts, here are the 95% CPIs with the
 nice stable estimates
@@ -264,10 +268,10 @@ posterior_interval(bysfitHxL, prob=0.95)
 ```
 
     ##                              2.5%      97.5%
-    ## (Intercept)             7.2154700 20.0003334
-    ## habitatforest          -5.0559259  6.5113058
-    ## latitude               -0.4304675 -0.1312756
-    ## habitatforest:latitude -0.1376706  0.1332009
+    ## (Intercept)             7.2941743 19.9634590
+    ## habitatforest          -5.0580618  6.4618146
+    ## latitude               -0.4297431 -0.1333764
+    ## habitatforest:latitude -0.1358371  0.1333733
 
 If we want HPDIs instead, we could calculate them directly from the
 samples, e.g. here using the `hpdi()` function from our class-materials
@@ -279,29 +283,29 @@ samples <- as.data.frame(bysfitHxL)
 hpdi(samples$"(Intercept)", prob=0.95)
 ```
 
-    ##         lower   upper
-    ## [1,] 7.232663 20.0064
+    ##         lower    upper
+    ## [1,] 7.358835 20.01699
 
 ``` r
 hpdi(samples$habitatforest, prob=0.95)
 ```
 
     ##          lower    upper
-    ## [1,] -4.989827 6.572593
+    ## [1,] -5.107337 6.398729
 
 ``` r
 hpdi(samples$latitude, prob=0.95)
 ```
 
     ##           lower      upper
-    ## [1,] -0.4283467 -0.1295207
+    ## [1,] -0.4280703 -0.1321343
 
 ``` r
 hpdi(samples$"habitatforest:latitude", prob=0.95)
 ```
 
     ##           lower     upper
-    ## [1,] -0.1348225 0.1356414
+    ## [1,] -0.1372309 0.1317401
 
 These are almost the same as the CPIs due to the symmetric posteriors.
 
@@ -362,7 +366,6 @@ function, i.e. Dist($\mu$), which we’ll call `pmu`.
 
 ``` r
 pmu <- posterior_linpred(bysfitHxL, transform=TRUE, newdata=newd)
-#pmu <- posterior_epred(bysfitHxL, newdata=newd)
 ```
 
 This is a matrix where each row is a sample from the posterior for each
@@ -378,7 +381,7 @@ class(pmu)
 str(pmu)
 ```
 
-    ##  num [1:60000, 1:100] 6.34 6.85 5.88 7.28 7.22 ...
+    ##  num [1:60000, 1:100] 6.72 7.49 6.85 6.37 6.58 ...
     ##  - attr(*, "dimnames")=List of 2
     ##   ..$ iterations: NULL
     ##   ..$           : chr [1:100] "1" "2" "3" "4" ...
@@ -390,11 +393,13 @@ the posterior
 mcmc_hist(pmu, pars=sample(colnames(pmu), 6), bins=75)
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
-Some of these posterior distributions for mean richness seem somewhat
-skewed with a longer tail to the right, which makes sense because
-richness is constrained positive. I’m going to choose the HPDI here.
+The panel header is the column number of the array (columns are
+different latitude/habitat combinations). Some of these posterior
+distributions for mean richness seem somewhat skewed with a longer tail
+to the right, which makes sense because richness is constrained
+positive. Thus, for intervals, I’m going to choose the HPDI here.
 
 The estimated expected values for $mu$ for each variable combination are
 then
@@ -403,7 +408,7 @@ then
 mnmu <- colMeans(pmu)
 ```
 
-and the 95% credible intervals for the mean are
+and the 95% credible intervals for the means are
 
 ``` r
 n <- nrow(newd)
@@ -421,7 +426,7 @@ ppd <- posterior_predict(bysfitHxL, newdata=newd)
 str(ppd)
 ```
 
-    ##  int [1:60000, 1:100] 6 11 6 8 3 6 4 6 4 10 ...
+    ##  int [1:60000, 1:100] 6 6 5 1 3 6 4 5 3 7 ...
     ##  - attr(*, "dimnames")=List of 2
     ##   ..$ : NULL
     ##   ..$ : chr [1:100] "1" "2" "3" "4" ...
@@ -430,9 +435,12 @@ str(ppd)
 mcmc_hist(ppd, pars=sample(colnames(ppd), 6), breaks=seq(-0.5,30.5))
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
-and the 95% prediction intervals (here CPI for stability) are then
+We see from the selection of plots that the posterior predictive
+distribution is discrete (Poisson) because the data generating process
+is Poisson by assumption. The 95% prediction intervals (here CPI for
+stability) are then
 
 ``` r
 prediction_intervals <- predictive_interval(ppd)
@@ -440,30 +448,40 @@ prediction_intervals <- data.frame(prediction_intervals)
 names(prediction_intervals) <- c("ppdlo95", "ppdhi95")
 ```
 
-Plot (code is the same as previous script)
+Gather all the derived quantities in the same data frame
 
 ``` r
 preds <- cbind(newd, mnmu, mean_intervals, prediction_intervals)
+```
+
+Plot (code is the same as previous Bayesian script)
+
+``` r
 bfc <- c("#d95f02", "#1b9e77") #bog & forest colors
-preds %>%
+preds |>
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
+    geom_ribbon(aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
                 alpha=0.2) +
-    geom_point(data=ant, mapping=aes(x=latitude, y=richness, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=mnmu, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
-    geom_line(mapping=aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=mnmu, col=habitat)) +
+    geom_line(aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_point(data=ant, aes(x=latitude, y=richness, col=habitat)) +
     annotate("text", x=42.7, y=3.3, label="Bog", col=bfc[1]) +
     annotate("text", x=43.85, y=9.5, label="Forest", col=bfc[2]) +
     scale_fill_manual(values=bfc) +
     scale_color_manual(values=bfc) +
     scale_y_continuous(breaks=seq(0, 20, 4), minor_breaks=seq(0, 20, 2)) +
+    coord_cartesian(ylim=c(0, 20)) +
     xlab("Latitude (degrees north)") +
     ylab("Ant species richness") +
     theme(legend.position="none")
 ```
 
-![](11_x_ants_bayesian_GLM_rstanarm_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+This is substantially similar to the inference from our `ulam` script
+and the frequentist analysis. However, the regression intervals and
+prediction intervals are narrower, presumably because the default priors
+are a little bit informative. We’ll look at the priors next.
 
 ## Summary
 
@@ -479,6 +497,5 @@ to model means and predictions so far:
 
 where:
 
-- `pmu <- posterior_linpred(transform = TRUE)`, or
-  `pmu <- posterior_epred()`
+- `pmu <- posterior_linpred(transform = TRUE)`
 - `ppd <- posterior_predict()`
