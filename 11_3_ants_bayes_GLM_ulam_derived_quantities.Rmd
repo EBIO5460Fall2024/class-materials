@@ -5,7 +5,7 @@ date: 5 Nov 2024
 output: github_document
 ---
 
-Third in a series of scripts to analyze the ant data described in Ellison (2004). This script includes specifying a Bayesian GLM with Poisson distribution and log link, training by HMC, and calculating uncertainties for derived quantities to answer our three scientific questions. Here we code the model explicitly with the function `ulam()` from McElreath's `rethinking` package and code posterior samples for derived quantities directly from the samples of parameters. Future scripts will consider likelihood and frequentist GLMs with the `lme4` package, and easy Bayesian fitting of GLMs with the `rstanarm` package, and multilevel models to fully account for the design structure.
+Third in a series of scripts to analyze the ant data described in Ellison (2004). This script includes specifying a Bayesian GLM with Poisson distribution and log link, training by HMC, and calculating uncertainties for derived quantities to answer our three scientific questions. Here we code the model explicitly with the function `ulam()` from McElreath's `rethinking` package and code posterior samples for derived quantities directly from the samples of parameters. Future scripts will consider frequentist and likelihood GLMs with the `stats` and `lme4` packages, and easy Bayesian fitting of GLMs with the `rstanarm` package, and multilevel models to fully account for the design structure.
 
 This Rmarkdown script can be rendered to a reproducible report (Ctrl+Shift+K in RStudio).
 
@@ -23,7 +23,7 @@ Read in and plot the data
 ant <- read.csv("data/ants.csv")
 ant$habitat <- factor(ant$habitat)
 ant |> 
-    ggplot(mapping=aes(x=latitude, y=richness, col=habitat)) +
+    ggplot(aes(x=latitude, y=richness, col=habitat)) +
     geom_point()
 ```
 
@@ -33,18 +33,19 @@ For the linear predictor, we'll write the model out explicitly, with the data or
 
 $$
 \begin{align}
-  y_i &\sim \mathrm{Poisson}(\mu_i) && \\
+  y_i &\sim \mathrm{Poisson}(\mu_i) \\
   log(\mu) &= \beta_0 \mathrm{intercept}_i + 
               \beta_1 \mathrm{forest}_i + 
               \beta_2 \mathrm{latitude}_i + 
-              \beta_3 \mathrm{forest}_i \mathrm{latitude}_i && \\
-  \beta_0 &\sim \mathrm{Normal}(1, 10) && \\
-  \beta_1 &\sim \mathrm{Normal}(0, 10) && \\
-  \beta_2 &\sim \mathrm{Normal}(0, 10) && \\
-  \beta_3 &\sim \mathrm{Normal}(0, 10) && \\
+              \beta_3 \mathrm{forest}_i \mathrm{latitude}_i \\
+  \beta_0 &\sim \mathrm{Normal}(1, 10) \\
+  \beta_1 &\sim \mathrm{Normal}(0, 10) \\
+  \beta_2 &\sim \mathrm{Normal}(0, 10) \\
+  \beta_3 &\sim \mathrm{Normal}(0, 10)
 \end{align}
 $$
-I've chosen (very) weakly informative priors, similar to those we've seen in McElreath so far. For $\beta_0$, I've centered the prior at 1. The linear predictor is on the log scale, so 1 corresponds to $e^1 = 2.7$ for bog species richness, which is closer to the mean richness of the data than $e^0 = 1$ and is more sensibly shaped than a prior with a lot of probability mass near a species richness of 0.
+
+I've chosen priors with very little information, not so much "weakly informative" but not totally flat either. For $\beta_0$, I've centered the prior at 1. The linear predictor is on the log scale, so 1 corresponds to $e^1 = 2.7$ for bog species richness, which is closer to the mean richness of the data than $e^0 = 1$ and is more sensibly shaped than a prior with a lot of probability mass near a species richness of 0.
 
 ## Training
 
@@ -84,13 +85,13 @@ bysfitHxL <- ulam(
 
 The model compiles and the training algorithm doesn't complain. So, now for a serious run. There will be a bunch of messages tracking progress of the chains.
 
-```{r message=FALSE, cache=TRUE}
+```{r results=FALSE, cache=TRUE}
 bysfitHxL <- ulam(bysfitHxL, chains=4, cores=4, warmup=1000, iter=10000)
 ```
 
 Parameter information
 
-```{r}
+```{r cache=TRUE}
 precis(bysfitHxL, prob=0.95, digits=4)
 ```
 
@@ -99,7 +100,7 @@ In the `precis` table, we can look at the posterior sample means (`mean`) for a 
 
 ### Working with posterior samples
 
-We'll first work with the samples directly (as we did in McElreath Ch 4). Doing it the slightly harder way first will prepare you for building your own custom analyses by developing a deeper understanding of the data structures as well as experience with visualization. In the next script, we'll do the same analysis with convenient functions in `rstanarm`.
+We'll first work with the samples directly (as we did in McElreath Ch 4). Doing it the slightly harder way first will prepare you for building your own custom analyses by developing a deeper understanding of the data structures as well as experience with visualization. In a following script, we'll do the same analysis with convenient functions in `rstanarm`.
 
 ```{r}
 samples <- extract.samples(bysfitHxL)
@@ -111,36 +112,31 @@ names(samples)
 
 ### Visualizing the posterior
 
-We can plot histograms directly from the samples. To do this with `ggplot`, we first need the samples in a dataframe. We can go one step further, converting the dataframe to tidy format (using `pivot_longer` from `tidyr`) and then using `facet_wrap` to plot histograms for all 4 parameters. First, make a copy of the samples in a dataframe data structure (instead of the default list structure).
+We can plot histograms directly from the samples. To do this with `ggplot`, we first need the samples in a dataframe instead of the default list structure. We'll copy the samples to a dataframe.
 
 ```{r}
 samplesdf <- data.frame(samples)
 head(samplesdf)
 ```
 
-Plot the histograms
+We can go one step further, converting the dataframe to tidy format (using `pivot_longer()` from `tidyr`) and then using `facet_wrap()` to plot histograms for all 4 parameters in one `ggplot`. We'll also use `after_stat(density)` to make histograms scaled so the total probability (area under the bars) is 1; we are effectively plotting the probability density.
 
 ```{r}
 samplesdf |> 
     pivot_longer(cols=everything(), names_to="parameter", values_to="sample_value") |> 
     ggplot() +
-    geom_histogram(mapping=aes(x=sample_value, y=after_stat(density)), bins=75) +
+    geom_histogram(aes(x=sample_value, y=after_stat(density)), bins=75) +
     facet_wrap(vars(parameter), scales="free")
 ```
 
-These histograms are not merely diagnostic. *The posterior distribution is the full inference for a parameter*. Diagnostically, we want to ask if the samples are giving us a good picture of the posterior distribution. These look very nice. We see that the distributions are roughly symmetric (statistical theory for these types of models suggests the posterior would be approximately Normal) and quite smooth (not noisy) due to the large number of samples.
+These histograms are not merely diagnostic. *The posterior distribution is the full inference for a parameter*. Diagnostically, we want to ask if the samples are giving us a good picture of the posterior distribution. These histograms look very nice. We see that the distributions are roughly symmetric (statistical theory for these types of models suggests the posterior would be approximately Normal) and quite smooth (not noisy) due to the large number of samples. Notably, the tails are quite smooth.
 
-Sometimes you might only want one of the histograms, in which case you can do it quickly and succinctly by using `hist` from base plot (not shown).
+Sometimes you might only want one of the histograms, in which case you can do it quickly and succinctly using `hist` from base plot, or an abbreviated ggplot (not shown).
 
 ```{r eval=FALSE}
 hist(samples$beta_0, breaks=75)
-```
-
-
-Here's a graphical summary of the parameters using the `rethinking` plot method. This shows 89% intervals by default.
-
-```{r}
-plot(bysfitHxL)
+ggplot() + 
+    geom_histogram(aes(samples$beta_0), bins=75)
 ```
 
 Check the traceplot to confirm convergence and check the behavior.
@@ -174,8 +170,8 @@ These quantities don't come directly from the samples for individual parameters 
 
 ```{r}
 # Initialize a grid of latitudes, scaled the same as we scaled the data
-lat_upr <- (45 - mean_lat) / sd_lat
 lat_lwr <- (41.92 - mean_lat) / sd_lat
+lat_upr <- (45 - mean_lat) / sd_lat
 latitude <- seq(from=lat_lwr, to=lat_upr, length.out=50)
 
 # Initialize storage
@@ -242,23 +238,26 @@ The credible intervals for the means are the shaded regions while the dashed lin
 bfc <- c("#d95f02", "#1b9e77") #bog & forest colors
 preds |>
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
+    geom_ribbon(aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
                 alpha=0.2) +
-    geom_point(data=ant, mapping=aes(x=latitude, y=richness, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=mnmu, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
-    geom_line(mapping=aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=mnmu, col=habitat)) +
+    geom_line(aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_point(data=ant, aes(x=latitude, y=richness, col=habitat)) +
     annotate("text", x=42.7, y=3.3, label="Bog", col=bfc[1]) +
     annotate("text", x=43.85, y=9.5, label="Forest", col=bfc[2]) +
     scale_fill_manual(values=bfc) +
     scale_color_manual(values=bfc) +
     scale_y_continuous(breaks=seq(0, 20, 4), minor_breaks=seq(0, 20, 2)) +
+    coord_cartesian(ylim=c(0, 20)) +
     xlab("Latitude (degrees north)") +
     ylab("Ant species richness") +
     theme(legend.position="none")
 ```
 
 Notice that the intervals for forest are wider than for bog. This is because the uncertainty scales with the mean of the response. Also notice that the intervals for the posterior predictive distribution have discrete steps. This is because the data generating process is discrete (e.g. we cannot have 1.3 species). The intervals are quite smooth. With fewer iterations, Monte Carlo error would be greater and we would see a few blips in the intervals for the predictive distribution and some wiggles in the mean intervals.
+
+### Scientific questions
 
 Let's consider now our original three scientific questions. We can answer question 1: **How does species richness vary with latitude?** The above plot shows this. Species richness declines with latitude and appears to be well described by a gentle exponential decline over the range of the data (because the inverse link function is exponential). The uncertainty in this relationship for both habitats is shown by the credible intervals for the mean. We can also answer question 2: **Is this relationship different between habitats?** There are two answers, depending on our view. On the one hand, we could conclude from the plot that species richness starts higher and declines faster with latitude in forest than in bog habitat. On the other hand, the exponential decline is about the same and there is little evidence for a difference in the exponent as judged by the value and uncertainty of $\beta_3$ (the difference in the exponent between habitats). The mean and 95% CPI for this parameter is (repeating here from earlier):
 
@@ -271,7 +270,7 @@ Finally, we can't properly answer question 3: **How different is species richnes
 
 ### Non-standard derived quantities
 
-To answer question 3, we need to make our own relevant quantities: the differences in mean species richness between habitats at different latitudes. These differences are a function of the parameters, so we can **derive** samples of them from samples of the parameters. The first half of this code is substantially the same as above; the main action is at the line that calculates the difference. The object `diff` contains the posterior samples for the difference in mean richness at a given altitude. I found the CPI to be a good and stable estimate of the credible interval.
+To answer question 3, we need to make our own relevant quantities: the differences in mean species richness between habitats at different latitudes. These differences are a function of the parameters, so we can **derive** samples of them from samples of the parameters. The first half of this code is substantially the same as above; the main action is at the line that calculates the difference. The object `diff` contains the posterior samples for the difference in mean richness at a given latitude. I found the CPI to be a good and stable estimate of the credible interval.
 
 ```{r}
 # Initialize variables and storage 
@@ -302,8 +301,8 @@ for ( i in 1:n ) {
     
     # Mean and intervals of these samples
     forest_bog_diff[i,1] <- mean(diff)
-    forest_bog_diff[i,2:3] <- HPDI(diff, prob=0.95)
-    #forest_bog_diff[i,2:3] <- quantile(diff, prob=c(0.025,0.975)) #CPI
+    #forest_bog_diff[i,2:3] <- HPDI(diff, prob=0.95)
+    forest_bog_diff[i,2:3] <- quantile(diff, prob=c(0.025,0.975)) #CPI
 
 }
 
@@ -318,9 +317,9 @@ Plot the difference with its uncertainty. I've used `coord_cartesian()` to set t
 ```{r}
 diff_df |> 
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=difflo95, ymax=diffhi95),
+    geom_ribbon(aes(x=latitude, ymin=difflo95, ymax=diffhi95),
         alpha=0.2) +
-    geom_line(mapping=aes(x=latitude, y=mndiff)) +
+    geom_line(aes(x=latitude, y=mndiff)) +
     coord_cartesian(ylim=c(0,8.3)) +
     xlab("Latitude (degrees north)") +
     ylab("Difference in species richness (forest - bog)")

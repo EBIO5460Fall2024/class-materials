@@ -10,9 +10,10 @@ uncertainties for derived quantities to answer our three scientific
 questions. Here we code the model explicitly with the function `ulam()`
 from McElreath’s `rethinking` package and code posterior samples for
 derived quantities directly from the samples of parameters. Future
-scripts will consider likelihood and frequentist GLMs with the `lme4`
-package, and easy Bayesian fitting of GLMs with the `rstanarm` package,
-and multilevel models to fully account for the design structure.
+scripts will consider frequentist and likelihood GLMs with the `stats`
+and `lme4` packages, and easy Bayesian fitting of GLMs with the
+`rstanarm` package, and multilevel models to fully account for the
+design structure.
 
 This Rmarkdown script can be rendered to a reproducible report
 (Ctrl+Shift+K in RStudio).
@@ -31,7 +32,7 @@ Read in and plot the data
 ant <- read.csv("data/ants.csv")
 ant$habitat <- factor(ant$habitat)
 ant |> 
-    ggplot(mapping=aes(x=latitude, y=richness, col=habitat)) +
+    ggplot(aes(x=latitude, y=richness, col=habitat)) +
     geom_point()
 ```
 
@@ -45,22 +46,25 @@ linear-additive model design matrix, as in the class slides.
 
 $$
 \begin{align}
-  y_i &\sim \mathrm{Poisson}(\mu_i) && \\
+  y_i &\sim \mathrm{Poisson}(\mu_i) \\
   log(\mu) &= \beta_0 \mathrm{intercept}_i + 
               \beta_1 \mathrm{forest}_i + 
               \beta_2 \mathrm{latitude}_i + 
-              \beta_3 \mathrm{forest}_i \mathrm{latitude}_i && \\
-  \beta_0 &\sim \mathrm{Normal}(1, 10) && \\
-  \beta_1 &\sim \mathrm{Normal}(0, 10) && \\
-  \beta_2 &\sim \mathrm{Normal}(0, 10) && \\
-  \beta_3 &\sim \mathrm{Normal}(0, 10) && \\
+              \beta_3 \mathrm{forest}_i \mathrm{latitude}_i \\
+  \beta_0 &\sim \mathrm{Normal}(1, 10) \\
+  \beta_1 &\sim \mathrm{Normal}(0, 10) \\
+  \beta_2 &\sim \mathrm{Normal}(0, 10) \\
+  \beta_3 &\sim \mathrm{Normal}(0, 10)
 \end{align}
-$$ I’ve chosen (very) weakly informative priors, similar to those we’ve
-seen in McElreath so far. For $\beta_0$, I’ve centered the prior at 1.
-The linear predictor is on the log scale, so 1 corresponds to
-$e^1 = 2.7$ for bog species richness, which is closer to the mean
-richness of the data than $e^0 = 1$ and is more sensibly shaped than a
-prior with a lot of probability mass near a species richness of 0.
+$$
+
+I’ve chosen priors with very little information, not so much “weakly
+informative” but not totally flat either. For $\beta_0$, I’ve centered
+the prior at 1. The linear predictor is on the log scale, so 1
+corresponds to $e^1 = 2.7$ for bog species richness, which is closer to
+the mean richness of the data than $e^0 = 1$ and is more sensibly shaped
+than a prior with a lot of probability mass near a species richness of
+0.
 
 ## Training
 
@@ -174,425 +178,6 @@ of the chains.
 bysfitHxL <- ulam(bysfitHxL, chains=4, cores=4, warmup=1000, iter=10000)
 ```
 
-    ## Running MCMC with 4 parallel chains, with 1 thread(s) per chain...
-    ## 
-    ## Chain 1 Iteration:    1 / 10000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:  100 / 10000 [  1%]  (Warmup) 
-    ## Chain 1 Iteration:  200 / 10000 [  2%]  (Warmup) 
-    ## Chain 1 Iteration:  300 / 10000 [  3%]  (Warmup) 
-    ## Chain 1 Iteration:  400 / 10000 [  4%]  (Warmup) 
-    ## Chain 1 Iteration:  500 / 10000 [  5%]  (Warmup) 
-    ## Chain 1 Iteration:  600 / 10000 [  6%]  (Warmup) 
-    ## Chain 1 Iteration:  700 / 10000 [  7%]  (Warmup) 
-    ## Chain 1 Iteration:  800 / 10000 [  8%]  (Warmup) 
-    ## Chain 1 Iteration:  900 / 10000 [  9%]  (Warmup) 
-    ## Chain 2 Iteration:    1 / 10000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration:  100 / 10000 [  1%]  (Warmup) 
-    ## Chain 2 Iteration:  200 / 10000 [  2%]  (Warmup) 
-    ## Chain 2 Iteration:  300 / 10000 [  3%]  (Warmup) 
-    ## Chain 2 Iteration:  400 / 10000 [  4%]  (Warmup) 
-    ## Chain 2 Iteration:  500 / 10000 [  5%]  (Warmup) 
-    ## Chain 2 Iteration:  600 / 10000 [  6%]  (Warmup) 
-    ## Chain 2 Iteration:  700 / 10000 [  7%]  (Warmup) 
-    ## Chain 3 Iteration:    1 / 10000 [  0%]  (Warmup) 
-    ## Chain 3 Iteration:  100 / 10000 [  1%]  (Warmup) 
-    ## Chain 3 Iteration:  200 / 10000 [  2%]  (Warmup) 
-    ## Chain 3 Iteration:  300 / 10000 [  3%]  (Warmup) 
-    ## Chain 3 Iteration:  400 / 10000 [  4%]  (Warmup) 
-    ## Chain 3 Iteration:  500 / 10000 [  5%]  (Warmup) 
-    ## Chain 3 Iteration:  600 / 10000 [  6%]  (Warmup) 
-    ## Chain 4 Iteration:    1 / 10000 [  0%]  (Warmup) 
-    ## Chain 4 Iteration:  100 / 10000 [  1%]  (Warmup) 
-    ## Chain 4 Iteration:  200 / 10000 [  2%]  (Warmup) 
-    ## Chain 4 Iteration:  300 / 10000 [  3%]  (Warmup) 
-    ## Chain 4 Iteration:  400 / 10000 [  4%]  (Warmup) 
-    ## Chain 4 Iteration:  500 / 10000 [  5%]  (Warmup) 
-    ## Chain 4 Iteration:  600 / 10000 [  6%]  (Warmup) 
-    ## Chain 1 Iteration: 1000 / 10000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration: 1001 / 10000 [ 10%]  (Sampling) 
-    ## Chain 1 Iteration: 1100 / 10000 [ 11%]  (Sampling) 
-    ## Chain 1 Iteration: 1200 / 10000 [ 12%]  (Sampling) 
-    ## Chain 1 Iteration: 1300 / 10000 [ 13%]  (Sampling) 
-    ## Chain 1 Iteration: 1400 / 10000 [ 14%]  (Sampling) 
-    ## Chain 1 Iteration: 1500 / 10000 [ 15%]  (Sampling) 
-    ## Chain 1 Iteration: 1600 / 10000 [ 16%]  (Sampling) 
-    ## Chain 1 Iteration: 1700 / 10000 [ 17%]  (Sampling) 
-    ## Chain 1 Iteration: 1800 / 10000 [ 18%]  (Sampling) 
-    ## Chain 1 Iteration: 1900 / 10000 [ 19%]  (Sampling) 
-    ## Chain 1 Iteration: 2000 / 10000 [ 20%]  (Sampling) 
-    ## Chain 1 Iteration: 2100 / 10000 [ 21%]  (Sampling) 
-    ## Chain 1 Iteration: 2200 / 10000 [ 22%]  (Sampling) 
-    ## Chain 1 Iteration: 2300 / 10000 [ 23%]  (Sampling) 
-    ## Chain 1 Iteration: 2400 / 10000 [ 24%]  (Sampling) 
-    ## Chain 1 Iteration: 2500 / 10000 [ 25%]  (Sampling) 
-    ## Chain 1 Iteration: 2600 / 10000 [ 26%]  (Sampling) 
-    ## Chain 1 Iteration: 2700 / 10000 [ 27%]  (Sampling) 
-    ## Chain 1 Iteration: 2800 / 10000 [ 28%]  (Sampling) 
-    ## Chain 1 Iteration: 2900 / 10000 [ 29%]  (Sampling) 
-    ## Chain 1 Iteration: 3000 / 10000 [ 30%]  (Sampling) 
-    ## Chain 1 Iteration: 3100 / 10000 [ 31%]  (Sampling) 
-    ## Chain 1 Iteration: 3200 / 10000 [ 32%]  (Sampling) 
-    ## Chain 1 Iteration: 3300 / 10000 [ 33%]  (Sampling) 
-    ## Chain 1 Iteration: 3400 / 10000 [ 34%]  (Sampling) 
-    ## Chain 1 Iteration: 3500 / 10000 [ 35%]  (Sampling) 
-    ## Chain 1 Iteration: 3600 / 10000 [ 36%]  (Sampling) 
-    ## Chain 1 Iteration: 3700 / 10000 [ 37%]  (Sampling) 
-    ## Chain 1 Iteration: 3800 / 10000 [ 38%]  (Sampling) 
-    ## Chain 1 Iteration: 3900 / 10000 [ 39%]  (Sampling) 
-    ## Chain 1 Iteration: 4000 / 10000 [ 40%]  (Sampling) 
-    ## Chain 1 Iteration: 4100 / 10000 [ 41%]  (Sampling) 
-    ## Chain 1 Iteration: 4200 / 10000 [ 42%]  (Sampling) 
-    ## Chain 1 Iteration: 4300 / 10000 [ 43%]  (Sampling) 
-    ## Chain 1 Iteration: 4400 / 10000 [ 44%]  (Sampling) 
-    ## Chain 1 Iteration: 4500 / 10000 [ 45%]  (Sampling) 
-    ## Chain 1 Iteration: 4600 / 10000 [ 46%]  (Sampling) 
-    ## Chain 1 Iteration: 4700 / 10000 [ 47%]  (Sampling) 
-    ## Chain 1 Iteration: 4800 / 10000 [ 48%]  (Sampling) 
-    ## Chain 1 Iteration: 4900 / 10000 [ 49%]  (Sampling) 
-    ## Chain 2 Iteration:  800 / 10000 [  8%]  (Warmup) 
-    ## Chain 2 Iteration:  900 / 10000 [  9%]  (Warmup) 
-    ## Chain 2 Iteration: 1000 / 10000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration: 1001 / 10000 [ 10%]  (Sampling) 
-    ## Chain 2 Iteration: 1100 / 10000 [ 11%]  (Sampling) 
-    ## Chain 2 Iteration: 1200 / 10000 [ 12%]  (Sampling) 
-    ## Chain 2 Iteration: 1300 / 10000 [ 13%]  (Sampling) 
-    ## Chain 2 Iteration: 1400 / 10000 [ 14%]  (Sampling) 
-    ## Chain 2 Iteration: 1500 / 10000 [ 15%]  (Sampling) 
-    ## Chain 2 Iteration: 1600 / 10000 [ 16%]  (Sampling) 
-    ## Chain 2 Iteration: 1700 / 10000 [ 17%]  (Sampling) 
-    ## Chain 2 Iteration: 1800 / 10000 [ 18%]  (Sampling) 
-    ## Chain 2 Iteration: 1900 / 10000 [ 19%]  (Sampling) 
-    ## Chain 2 Iteration: 2000 / 10000 [ 20%]  (Sampling) 
-    ## Chain 2 Iteration: 2100 / 10000 [ 21%]  (Sampling) 
-    ## Chain 2 Iteration: 2200 / 10000 [ 22%]  (Sampling) 
-    ## Chain 2 Iteration: 2300 / 10000 [ 23%]  (Sampling) 
-    ## Chain 2 Iteration: 2400 / 10000 [ 24%]  (Sampling) 
-    ## Chain 2 Iteration: 2500 / 10000 [ 25%]  (Sampling) 
-    ## Chain 2 Iteration: 2600 / 10000 [ 26%]  (Sampling) 
-    ## Chain 2 Iteration: 2700 / 10000 [ 27%]  (Sampling) 
-    ## Chain 2 Iteration: 2800 / 10000 [ 28%]  (Sampling) 
-    ## Chain 2 Iteration: 2900 / 10000 [ 29%]  (Sampling) 
-    ## Chain 2 Iteration: 3000 / 10000 [ 30%]  (Sampling) 
-    ## Chain 2 Iteration: 3100 / 10000 [ 31%]  (Sampling) 
-    ## Chain 2 Iteration: 3200 / 10000 [ 32%]  (Sampling) 
-    ## Chain 2 Iteration: 3300 / 10000 [ 33%]  (Sampling) 
-    ## Chain 2 Iteration: 3400 / 10000 [ 34%]  (Sampling) 
-    ## Chain 2 Iteration: 3500 / 10000 [ 35%]  (Sampling) 
-    ## Chain 2 Iteration: 3600 / 10000 [ 36%]  (Sampling) 
-    ## Chain 2 Iteration: 3700 / 10000 [ 37%]  (Sampling) 
-    ## Chain 2 Iteration: 3800 / 10000 [ 38%]  (Sampling) 
-    ## Chain 2 Iteration: 3900 / 10000 [ 39%]  (Sampling) 
-    ## Chain 2 Iteration: 4000 / 10000 [ 40%]  (Sampling) 
-    ## Chain 3 Iteration:  700 / 10000 [  7%]  (Warmup) 
-    ## Chain 3 Iteration:  800 / 10000 [  8%]  (Warmup) 
-    ## Chain 3 Iteration:  900 / 10000 [  9%]  (Warmup) 
-    ## Chain 3 Iteration: 1000 / 10000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration: 1001 / 10000 [ 10%]  (Sampling) 
-    ## Chain 3 Iteration: 1100 / 10000 [ 11%]  (Sampling) 
-    ## Chain 3 Iteration: 1200 / 10000 [ 12%]  (Sampling) 
-    ## Chain 3 Iteration: 1300 / 10000 [ 13%]  (Sampling) 
-    ## Chain 3 Iteration: 1400 / 10000 [ 14%]  (Sampling) 
-    ## Chain 3 Iteration: 1500 / 10000 [ 15%]  (Sampling) 
-    ## Chain 3 Iteration: 1600 / 10000 [ 16%]  (Sampling) 
-    ## Chain 3 Iteration: 1700 / 10000 [ 17%]  (Sampling) 
-    ## Chain 3 Iteration: 1800 / 10000 [ 18%]  (Sampling) 
-    ## Chain 3 Iteration: 1900 / 10000 [ 19%]  (Sampling) 
-    ## Chain 3 Iteration: 2000 / 10000 [ 20%]  (Sampling) 
-    ## Chain 3 Iteration: 2100 / 10000 [ 21%]  (Sampling) 
-    ## Chain 3 Iteration: 2200 / 10000 [ 22%]  (Sampling) 
-    ## Chain 3 Iteration: 2300 / 10000 [ 23%]  (Sampling) 
-    ## Chain 3 Iteration: 2400 / 10000 [ 24%]  (Sampling) 
-    ## Chain 3 Iteration: 2500 / 10000 [ 25%]  (Sampling) 
-    ## Chain 3 Iteration: 2600 / 10000 [ 26%]  (Sampling) 
-    ## Chain 3 Iteration: 2700 / 10000 [ 27%]  (Sampling) 
-    ## Chain 3 Iteration: 2800 / 10000 [ 28%]  (Sampling) 
-    ## Chain 3 Iteration: 2900 / 10000 [ 29%]  (Sampling) 
-    ## Chain 3 Iteration: 3000 / 10000 [ 30%]  (Sampling) 
-    ## Chain 3 Iteration: 3100 / 10000 [ 31%]  (Sampling) 
-    ## Chain 3 Iteration: 3200 / 10000 [ 32%]  (Sampling) 
-    ## Chain 3 Iteration: 3300 / 10000 [ 33%]  (Sampling) 
-    ## Chain 3 Iteration: 3400 / 10000 [ 34%]  (Sampling) 
-    ## Chain 3 Iteration: 3500 / 10000 [ 35%]  (Sampling) 
-    ## Chain 3 Iteration: 3600 / 10000 [ 36%]  (Sampling) 
-    ## Chain 3 Iteration: 3700 / 10000 [ 37%]  (Sampling) 
-    ## Chain 4 Iteration:  700 / 10000 [  7%]  (Warmup) 
-    ## Chain 4 Iteration:  800 / 10000 [  8%]  (Warmup) 
-    ## Chain 4 Iteration:  900 / 10000 [  9%]  (Warmup) 
-    ## Chain 4 Iteration: 1000 / 10000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration: 1001 / 10000 [ 10%]  (Sampling) 
-    ## Chain 4 Iteration: 1100 / 10000 [ 11%]  (Sampling) 
-    ## Chain 4 Iteration: 1200 / 10000 [ 12%]  (Sampling) 
-    ## Chain 4 Iteration: 1300 / 10000 [ 13%]  (Sampling) 
-    ## Chain 4 Iteration: 1400 / 10000 [ 14%]  (Sampling) 
-    ## Chain 4 Iteration: 1500 / 10000 [ 15%]  (Sampling) 
-    ## Chain 4 Iteration: 1600 / 10000 [ 16%]  (Sampling) 
-    ## Chain 4 Iteration: 1700 / 10000 [ 17%]  (Sampling) 
-    ## Chain 4 Iteration: 1800 / 10000 [ 18%]  (Sampling) 
-    ## Chain 4 Iteration: 1900 / 10000 [ 19%]  (Sampling) 
-    ## Chain 4 Iteration: 2000 / 10000 [ 20%]  (Sampling) 
-    ## Chain 4 Iteration: 2100 / 10000 [ 21%]  (Sampling) 
-    ## Chain 4 Iteration: 2200 / 10000 [ 22%]  (Sampling) 
-    ## Chain 4 Iteration: 2300 / 10000 [ 23%]  (Sampling) 
-    ## Chain 4 Iteration: 2400 / 10000 [ 24%]  (Sampling) 
-    ## Chain 4 Iteration: 2500 / 10000 [ 25%]  (Sampling) 
-    ## Chain 4 Iteration: 2600 / 10000 [ 26%]  (Sampling) 
-    ## Chain 4 Iteration: 2700 / 10000 [ 27%]  (Sampling) 
-    ## Chain 4 Iteration: 2800 / 10000 [ 28%]  (Sampling) 
-    ## Chain 4 Iteration: 2900 / 10000 [ 29%]  (Sampling) 
-    ## Chain 4 Iteration: 3000 / 10000 [ 30%]  (Sampling) 
-    ## Chain 4 Iteration: 3100 / 10000 [ 31%]  (Sampling) 
-    ## Chain 4 Iteration: 3200 / 10000 [ 32%]  (Sampling) 
-    ## Chain 4 Iteration: 3300 / 10000 [ 33%]  (Sampling) 
-    ## Chain 4 Iteration: 3400 / 10000 [ 34%]  (Sampling) 
-    ## Chain 4 Iteration: 3500 / 10000 [ 35%]  (Sampling) 
-    ## Chain 4 Iteration: 3600 / 10000 [ 36%]  (Sampling) 
-    ## Chain 4 Iteration: 3700 / 10000 [ 37%]  (Sampling) 
-    ## Chain 4 Iteration: 3800 / 10000 [ 38%]  (Sampling) 
-    ## Chain 1 Iteration: 5000 / 10000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 5100 / 10000 [ 51%]  (Sampling) 
-    ## Chain 1 Iteration: 5200 / 10000 [ 52%]  (Sampling) 
-    ## Chain 1 Iteration: 5300 / 10000 [ 53%]  (Sampling) 
-    ## Chain 1 Iteration: 5400 / 10000 [ 54%]  (Sampling) 
-    ## Chain 1 Iteration: 5500 / 10000 [ 55%]  (Sampling) 
-    ## Chain 1 Iteration: 5600 / 10000 [ 56%]  (Sampling) 
-    ## Chain 1 Iteration: 5700 / 10000 [ 57%]  (Sampling) 
-    ## Chain 1 Iteration: 5800 / 10000 [ 58%]  (Sampling) 
-    ## Chain 1 Iteration: 5900 / 10000 [ 59%]  (Sampling) 
-    ## Chain 1 Iteration: 6000 / 10000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 6100 / 10000 [ 61%]  (Sampling) 
-    ## Chain 1 Iteration: 6200 / 10000 [ 62%]  (Sampling) 
-    ## Chain 1 Iteration: 6300 / 10000 [ 63%]  (Sampling) 
-    ## Chain 1 Iteration: 6400 / 10000 [ 64%]  (Sampling) 
-    ## Chain 1 Iteration: 6500 / 10000 [ 65%]  (Sampling) 
-    ## Chain 1 Iteration: 6600 / 10000 [ 66%]  (Sampling) 
-    ## Chain 1 Iteration: 6700 / 10000 [ 67%]  (Sampling) 
-    ## Chain 1 Iteration: 6800 / 10000 [ 68%]  (Sampling) 
-    ## Chain 1 Iteration: 6900 / 10000 [ 69%]  (Sampling) 
-    ## Chain 1 Iteration: 7000 / 10000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 4100 / 10000 [ 41%]  (Sampling) 
-    ## Chain 2 Iteration: 4200 / 10000 [ 42%]  (Sampling) 
-    ## Chain 2 Iteration: 4300 / 10000 [ 43%]  (Sampling) 
-    ## Chain 2 Iteration: 4400 / 10000 [ 44%]  (Sampling) 
-    ## Chain 2 Iteration: 4500 / 10000 [ 45%]  (Sampling) 
-    ## Chain 2 Iteration: 4600 / 10000 [ 46%]  (Sampling) 
-    ## Chain 2 Iteration: 4700 / 10000 [ 47%]  (Sampling) 
-    ## Chain 2 Iteration: 4800 / 10000 [ 48%]  (Sampling) 
-    ## Chain 2 Iteration: 4900 / 10000 [ 49%]  (Sampling) 
-    ## Chain 2 Iteration: 5000 / 10000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 5100 / 10000 [ 51%]  (Sampling) 
-    ## Chain 2 Iteration: 5200 / 10000 [ 52%]  (Sampling) 
-    ## Chain 2 Iteration: 5300 / 10000 [ 53%]  (Sampling) 
-    ## Chain 2 Iteration: 5400 / 10000 [ 54%]  (Sampling) 
-    ## Chain 2 Iteration: 5500 / 10000 [ 55%]  (Sampling) 
-    ## Chain 2 Iteration: 5600 / 10000 [ 56%]  (Sampling) 
-    ## Chain 2 Iteration: 5700 / 10000 [ 57%]  (Sampling) 
-    ## Chain 2 Iteration: 5800 / 10000 [ 58%]  (Sampling) 
-    ## Chain 2 Iteration: 5900 / 10000 [ 59%]  (Sampling) 
-    ## Chain 2 Iteration: 6000 / 10000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 3800 / 10000 [ 38%]  (Sampling) 
-    ## Chain 3 Iteration: 3900 / 10000 [ 39%]  (Sampling) 
-    ## Chain 3 Iteration: 4000 / 10000 [ 40%]  (Sampling) 
-    ## Chain 3 Iteration: 4100 / 10000 [ 41%]  (Sampling) 
-    ## Chain 3 Iteration: 4200 / 10000 [ 42%]  (Sampling) 
-    ## Chain 3 Iteration: 4300 / 10000 [ 43%]  (Sampling) 
-    ## Chain 3 Iteration: 4400 / 10000 [ 44%]  (Sampling) 
-    ## Chain 3 Iteration: 4500 / 10000 [ 45%]  (Sampling) 
-    ## Chain 3 Iteration: 4600 / 10000 [ 46%]  (Sampling) 
-    ## Chain 3 Iteration: 4700 / 10000 [ 47%]  (Sampling) 
-    ## Chain 3 Iteration: 4800 / 10000 [ 48%]  (Sampling) 
-    ## Chain 3 Iteration: 4900 / 10000 [ 49%]  (Sampling) 
-    ## Chain 3 Iteration: 5000 / 10000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 5100 / 10000 [ 51%]  (Sampling) 
-    ## Chain 3 Iteration: 5200 / 10000 [ 52%]  (Sampling) 
-    ## Chain 3 Iteration: 5300 / 10000 [ 53%]  (Sampling) 
-    ## Chain 3 Iteration: 5400 / 10000 [ 54%]  (Sampling) 
-    ## Chain 3 Iteration: 5500 / 10000 [ 55%]  (Sampling) 
-    ## Chain 3 Iteration: 5600 / 10000 [ 56%]  (Sampling) 
-    ## Chain 3 Iteration: 5700 / 10000 [ 57%]  (Sampling) 
-    ## Chain 3 Iteration: 5800 / 10000 [ 58%]  (Sampling) 
-    ## Chain 4 Iteration: 3900 / 10000 [ 39%]  (Sampling) 
-    ## Chain 4 Iteration: 4000 / 10000 [ 40%]  (Sampling) 
-    ## Chain 4 Iteration: 4100 / 10000 [ 41%]  (Sampling) 
-    ## Chain 4 Iteration: 4200 / 10000 [ 42%]  (Sampling) 
-    ## Chain 4 Iteration: 4300 / 10000 [ 43%]  (Sampling) 
-    ## Chain 4 Iteration: 4400 / 10000 [ 44%]  (Sampling) 
-    ## Chain 4 Iteration: 4500 / 10000 [ 45%]  (Sampling) 
-    ## Chain 4 Iteration: 4600 / 10000 [ 46%]  (Sampling) 
-    ## Chain 4 Iteration: 4700 / 10000 [ 47%]  (Sampling) 
-    ## Chain 4 Iteration: 4800 / 10000 [ 48%]  (Sampling) 
-    ## Chain 4 Iteration: 4900 / 10000 [ 49%]  (Sampling) 
-    ## Chain 4 Iteration: 5000 / 10000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 5100 / 10000 [ 51%]  (Sampling) 
-    ## Chain 4 Iteration: 5200 / 10000 [ 52%]  (Sampling) 
-    ## Chain 4 Iteration: 5300 / 10000 [ 53%]  (Sampling) 
-    ## Chain 4 Iteration: 5400 / 10000 [ 54%]  (Sampling) 
-    ## Chain 4 Iteration: 5500 / 10000 [ 55%]  (Sampling) 
-    ## Chain 4 Iteration: 5600 / 10000 [ 56%]  (Sampling) 
-    ## Chain 1 Iteration: 7100 / 10000 [ 71%]  (Sampling) 
-    ## Chain 1 Iteration: 7200 / 10000 [ 72%]  (Sampling) 
-    ## Chain 1 Iteration: 7300 / 10000 [ 73%]  (Sampling) 
-    ## Chain 1 Iteration: 7400 / 10000 [ 74%]  (Sampling) 
-    ## Chain 1 Iteration: 7500 / 10000 [ 75%]  (Sampling) 
-    ## Chain 1 Iteration: 7600 / 10000 [ 76%]  (Sampling) 
-    ## Chain 1 Iteration: 7700 / 10000 [ 77%]  (Sampling) 
-    ## Chain 1 Iteration: 7800 / 10000 [ 78%]  (Sampling) 
-    ## Chain 1 Iteration: 7900 / 10000 [ 79%]  (Sampling) 
-    ## Chain 1 Iteration: 8000 / 10000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 8100 / 10000 [ 81%]  (Sampling) 
-    ## Chain 1 Iteration: 8200 / 10000 [ 82%]  (Sampling) 
-    ## Chain 1 Iteration: 8300 / 10000 [ 83%]  (Sampling) 
-    ## Chain 1 Iteration: 8400 / 10000 [ 84%]  (Sampling) 
-    ## Chain 1 Iteration: 8500 / 10000 [ 85%]  (Sampling) 
-    ## Chain 1 Iteration: 8600 / 10000 [ 86%]  (Sampling) 
-    ## Chain 2 Iteration: 6100 / 10000 [ 61%]  (Sampling) 
-    ## Chain 2 Iteration: 6200 / 10000 [ 62%]  (Sampling) 
-    ## Chain 2 Iteration: 6300 / 10000 [ 63%]  (Sampling) 
-    ## Chain 2 Iteration: 6400 / 10000 [ 64%]  (Sampling) 
-    ## Chain 2 Iteration: 6500 / 10000 [ 65%]  (Sampling) 
-    ## Chain 2 Iteration: 6600 / 10000 [ 66%]  (Sampling) 
-    ## Chain 2 Iteration: 6700 / 10000 [ 67%]  (Sampling) 
-    ## Chain 2 Iteration: 6800 / 10000 [ 68%]  (Sampling) 
-    ## Chain 2 Iteration: 6900 / 10000 [ 69%]  (Sampling) 
-    ## Chain 2 Iteration: 7000 / 10000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 7100 / 10000 [ 71%]  (Sampling) 
-    ## Chain 2 Iteration: 7200 / 10000 [ 72%]  (Sampling) 
-    ## Chain 2 Iteration: 7300 / 10000 [ 73%]  (Sampling) 
-    ## Chain 2 Iteration: 7400 / 10000 [ 74%]  (Sampling) 
-    ## Chain 3 Iteration: 5900 / 10000 [ 59%]  (Sampling) 
-    ## Chain 3 Iteration: 6000 / 10000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 6100 / 10000 [ 61%]  (Sampling) 
-    ## Chain 3 Iteration: 6200 / 10000 [ 62%]  (Sampling) 
-    ## Chain 3 Iteration: 6300 / 10000 [ 63%]  (Sampling) 
-    ## Chain 3 Iteration: 6400 / 10000 [ 64%]  (Sampling) 
-    ## Chain 3 Iteration: 6500 / 10000 [ 65%]  (Sampling) 
-    ## Chain 3 Iteration: 6600 / 10000 [ 66%]  (Sampling) 
-    ## Chain 3 Iteration: 6700 / 10000 [ 67%]  (Sampling) 
-    ## Chain 3 Iteration: 6800 / 10000 [ 68%]  (Sampling) 
-    ## Chain 3 Iteration: 6900 / 10000 [ 69%]  (Sampling) 
-    ## Chain 3 Iteration: 7000 / 10000 [ 70%]  (Sampling) 
-    ## Chain 3 Iteration: 7100 / 10000 [ 71%]  (Sampling) 
-    ## Chain 4 Iteration: 5700 / 10000 [ 57%]  (Sampling) 
-    ## Chain 4 Iteration: 5800 / 10000 [ 58%]  (Sampling) 
-    ## Chain 4 Iteration: 5900 / 10000 [ 59%]  (Sampling) 
-    ## Chain 4 Iteration: 6000 / 10000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 6100 / 10000 [ 61%]  (Sampling) 
-    ## Chain 4 Iteration: 6200 / 10000 [ 62%]  (Sampling) 
-    ## Chain 4 Iteration: 6300 / 10000 [ 63%]  (Sampling) 
-    ## Chain 4 Iteration: 6400 / 10000 [ 64%]  (Sampling) 
-    ## Chain 4 Iteration: 6500 / 10000 [ 65%]  (Sampling) 
-    ## Chain 4 Iteration: 6600 / 10000 [ 66%]  (Sampling) 
-    ## Chain 4 Iteration: 6700 / 10000 [ 67%]  (Sampling) 
-    ## Chain 4 Iteration: 6800 / 10000 [ 68%]  (Sampling) 
-    ## Chain 4 Iteration: 6900 / 10000 [ 69%]  (Sampling) 
-    ## Chain 1 Iteration: 8700 / 10000 [ 87%]  (Sampling) 
-    ## Chain 1 Iteration: 8800 / 10000 [ 88%]  (Sampling) 
-    ## Chain 1 Iteration: 8900 / 10000 [ 89%]  (Sampling) 
-    ## Chain 1 Iteration: 9000 / 10000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 9100 / 10000 [ 91%]  (Sampling) 
-    ## Chain 1 Iteration: 9200 / 10000 [ 92%]  (Sampling) 
-    ## Chain 1 Iteration: 9300 / 10000 [ 93%]  (Sampling) 
-    ## Chain 1 Iteration: 9400 / 10000 [ 94%]  (Sampling) 
-    ## Chain 1 Iteration: 9500 / 10000 [ 95%]  (Sampling) 
-    ## Chain 1 Iteration: 9600 / 10000 [ 96%]  (Sampling) 
-    ## Chain 1 Iteration: 9700 / 10000 [ 97%]  (Sampling) 
-    ## Chain 1 Iteration: 9800 / 10000 [ 98%]  (Sampling) 
-    ## Chain 1 Iteration: 9900 / 10000 [ 99%]  (Sampling) 
-    ## Chain 1 Iteration: 10000 / 10000 [100%]  (Sampling) 
-    ## Chain 2 Iteration: 7500 / 10000 [ 75%]  (Sampling) 
-    ## Chain 2 Iteration: 7600 / 10000 [ 76%]  (Sampling) 
-    ## Chain 2 Iteration: 7700 / 10000 [ 77%]  (Sampling) 
-    ## Chain 2 Iteration: 7800 / 10000 [ 78%]  (Sampling) 
-    ## Chain 2 Iteration: 7900 / 10000 [ 79%]  (Sampling) 
-    ## Chain 2 Iteration: 8000 / 10000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 8100 / 10000 [ 81%]  (Sampling) 
-    ## Chain 2 Iteration: 8200 / 10000 [ 82%]  (Sampling) 
-    ## Chain 2 Iteration: 8300 / 10000 [ 83%]  (Sampling) 
-    ## Chain 2 Iteration: 8400 / 10000 [ 84%]  (Sampling) 
-    ## Chain 2 Iteration: 8500 / 10000 [ 85%]  (Sampling) 
-    ## Chain 2 Iteration: 8600 / 10000 [ 86%]  (Sampling) 
-    ## Chain 2 Iteration: 8700 / 10000 [ 87%]  (Sampling) 
-    ## Chain 3 Iteration: 7200 / 10000 [ 72%]  (Sampling) 
-    ## Chain 3 Iteration: 7300 / 10000 [ 73%]  (Sampling) 
-    ## Chain 3 Iteration: 7400 / 10000 [ 74%]  (Sampling) 
-    ## Chain 3 Iteration: 7500 / 10000 [ 75%]  (Sampling) 
-    ## Chain 3 Iteration: 7600 / 10000 [ 76%]  (Sampling) 
-    ## Chain 3 Iteration: 7700 / 10000 [ 77%]  (Sampling) 
-    ## Chain 3 Iteration: 7800 / 10000 [ 78%]  (Sampling) 
-    ## Chain 3 Iteration: 7900 / 10000 [ 79%]  (Sampling) 
-    ## Chain 3 Iteration: 8000 / 10000 [ 80%]  (Sampling) 
-    ## Chain 3 Iteration: 8100 / 10000 [ 81%]  (Sampling) 
-    ## Chain 3 Iteration: 8200 / 10000 [ 82%]  (Sampling) 
-    ## Chain 3 Iteration: 8300 / 10000 [ 83%]  (Sampling) 
-    ## Chain 3 Iteration: 8400 / 10000 [ 84%]  (Sampling) 
-    ## Chain 4 Iteration: 7000 / 10000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 7100 / 10000 [ 71%]  (Sampling) 
-    ## Chain 4 Iteration: 7200 / 10000 [ 72%]  (Sampling) 
-    ## Chain 4 Iteration: 7300 / 10000 [ 73%]  (Sampling) 
-    ## Chain 4 Iteration: 7400 / 10000 [ 74%]  (Sampling) 
-    ## Chain 4 Iteration: 7500 / 10000 [ 75%]  (Sampling) 
-    ## Chain 4 Iteration: 7600 / 10000 [ 76%]  (Sampling) 
-    ## Chain 4 Iteration: 7700 / 10000 [ 77%]  (Sampling) 
-    ## Chain 4 Iteration: 7800 / 10000 [ 78%]  (Sampling) 
-    ## Chain 4 Iteration: 7900 / 10000 [ 79%]  (Sampling) 
-    ## Chain 4 Iteration: 8000 / 10000 [ 80%]  (Sampling) 
-    ## Chain 4 Iteration: 8100 / 10000 [ 81%]  (Sampling) 
-    ## Chain 1 finished in 1.3 seconds.
-    ## Chain 2 Iteration: 8800 / 10000 [ 88%]  (Sampling) 
-    ## Chain 2 Iteration: 8900 / 10000 [ 89%]  (Sampling) 
-    ## Chain 2 Iteration: 9000 / 10000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 9100 / 10000 [ 91%]  (Sampling) 
-    ## Chain 2 Iteration: 9200 / 10000 [ 92%]  (Sampling) 
-    ## Chain 2 Iteration: 9300 / 10000 [ 93%]  (Sampling) 
-    ## Chain 2 Iteration: 9400 / 10000 [ 94%]  (Sampling) 
-    ## Chain 2 Iteration: 9500 / 10000 [ 95%]  (Sampling) 
-    ## Chain 2 Iteration: 9600 / 10000 [ 96%]  (Sampling) 
-    ## Chain 2 Iteration: 9700 / 10000 [ 97%]  (Sampling) 
-    ## Chain 2 Iteration: 9800 / 10000 [ 98%]  (Sampling) 
-    ## Chain 2 Iteration: 9900 / 10000 [ 99%]  (Sampling) 
-    ## Chain 2 Iteration: 10000 / 10000 [100%]  (Sampling) 
-    ## Chain 3 Iteration: 8500 / 10000 [ 85%]  (Sampling) 
-    ## Chain 3 Iteration: 8600 / 10000 [ 86%]  (Sampling) 
-    ## Chain 3 Iteration: 8700 / 10000 [ 87%]  (Sampling) 
-    ## Chain 3 Iteration: 8800 / 10000 [ 88%]  (Sampling) 
-    ## Chain 3 Iteration: 8900 / 10000 [ 89%]  (Sampling) 
-    ## Chain 3 Iteration: 9000 / 10000 [ 90%]  (Sampling) 
-    ## Chain 3 Iteration: 9100 / 10000 [ 91%]  (Sampling) 
-    ## Chain 3 Iteration: 9200 / 10000 [ 92%]  (Sampling) 
-    ## Chain 3 Iteration: 9300 / 10000 [ 93%]  (Sampling) 
-    ## Chain 3 Iteration: 9400 / 10000 [ 94%]  (Sampling) 
-    ## Chain 3 Iteration: 9500 / 10000 [ 95%]  (Sampling) 
-    ## Chain 3 Iteration: 9600 / 10000 [ 96%]  (Sampling) 
-    ## Chain 3 Iteration: 9700 / 10000 [ 97%]  (Sampling) 
-    ## Chain 3 Iteration: 9800 / 10000 [ 98%]  (Sampling) 
-    ## Chain 4 Iteration: 8200 / 10000 [ 82%]  (Sampling) 
-    ## Chain 4 Iteration: 8300 / 10000 [ 83%]  (Sampling) 
-    ## Chain 4 Iteration: 8400 / 10000 [ 84%]  (Sampling) 
-    ## Chain 4 Iteration: 8500 / 10000 [ 85%]  (Sampling) 
-    ## Chain 4 Iteration: 8600 / 10000 [ 86%]  (Sampling) 
-    ## Chain 4 Iteration: 8700 / 10000 [ 87%]  (Sampling) 
-    ## Chain 4 Iteration: 8800 / 10000 [ 88%]  (Sampling) 
-    ## Chain 4 Iteration: 8900 / 10000 [ 89%]  (Sampling) 
-    ## Chain 4 Iteration: 9000 / 10000 [ 90%]  (Sampling) 
-    ## Chain 4 Iteration: 9100 / 10000 [ 91%]  (Sampling) 
-    ## Chain 4 Iteration: 9200 / 10000 [ 92%]  (Sampling) 
-    ## Chain 4 Iteration: 9300 / 10000 [ 93%]  (Sampling) 
-    ## Chain 4 Iteration: 9400 / 10000 [ 94%]  (Sampling) 
-    ## Chain 4 Iteration: 9500 / 10000 [ 95%]  (Sampling) 
-    ## Chain 2 finished in 1.4 seconds.
-    ## Chain 3 Iteration: 9900 / 10000 [ 99%]  (Sampling) 
-    ## Chain 3 Iteration: 10000 / 10000 [100%]  (Sampling) 
-    ## Chain 3 finished in 1.4 seconds.
-    ## Chain 4 Iteration: 9600 / 10000 [ 96%]  (Sampling) 
-    ## Chain 4 Iteration: 9700 / 10000 [ 97%]  (Sampling) 
-    ## Chain 4 Iteration: 9800 / 10000 [ 98%]  (Sampling) 
-    ## Chain 4 Iteration: 9900 / 10000 [ 99%]  (Sampling) 
-    ## Chain 4 Iteration: 10000 / 10000 [100%]  (Sampling) 
-    ## Chain 4 finished in 1.4 seconds.
-    ## 
-    ## All 4 chains finished successfully.
-    ## Mean chain execution time: 1.4 seconds.
-    ## Total execution time: 1.7 seconds.
-
 Parameter information
 
 ``` r
@@ -600,10 +185,10 @@ precis(bysfitHxL, prob=0.95, digits=4)
 ```
 
     ##               mean        sd       2.5%       97.5%     rhat ess_bulk
-    ## beta_0  1.53453146 0.1018630  1.3289098  1.72809050 1.000349 14326.22
-    ## beta_1  0.63354681 0.1259732  0.3905948  0.88417840 1.000430 14251.25
-    ## beta_2 -0.28589951 0.1100518 -0.5094843 -0.07892506 1.000377 13353.31
-    ## beta_3 -0.02457277 0.1372569 -0.2875208  0.24857483 1.000453 13279.94
+    ## beta_0  1.53649119 0.1019609  1.3334393  1.73425025 1.000270 14029.10
+    ## beta_1  0.63215921 0.1260865  0.3877904  0.88277157 1.000076 13971.38
+    ## beta_2 -0.28517140 0.1103057 -0.5056801 -0.07343556 1.000125 14025.57
+    ## beta_3 -0.02542328 0.1371578 -0.2926911  0.24605310 1.000231 13850.66
 
 In the `precis` table, we can look at the posterior sample means
 (`mean`) for a point estimate of the parameter values. The standard
@@ -623,7 +208,7 @@ latitude centered.
 We’ll first work with the samples directly (as we did in McElreath Ch
 4). Doing it the slightly harder way first will prepare you for building
 your own custom analyses by developing a deeper understanding of the
-data structures as well as experience with visualization. In the next
+data structures as well as experience with visualization. In a following
 script, we’ll do the same analysis with convenient functions in
 `rstanarm`.
 
@@ -639,10 +224,10 @@ str(samples)
 ```
 
     ## List of 4
-    ##  $ beta_0: num [1:36000, 1] 1.55 1.56 1.58 1.55 1.61 ...
-    ##  $ beta_1: num [1:36000, 1] 0.672 0.618 0.632 0.616 0.662 ...
-    ##  $ beta_2: num [1:36000, 1] -0.333 -0.266 -0.243 -0.265 -0.283 ...
-    ##  $ beta_3: num [1:36000, 1] 0.0771 0.0908 0.0852 -0.0103 -0.064 ...
+    ##  $ beta_0: num [1:36000, 1] 1.56 1.64 1.43 1.6 1.47 ...
+    ##  $ beta_1: num [1:36000, 1] 0.485 0.579 0.755 0.63 0.686 ...
+    ##  $ beta_2: num [1:36000, 1] -0.398 -0.3 -0.297 -0.209 -0.256 ...
+    ##  $ beta_3: num [1:36000, 1] 0.00739 0.04207 -0.05913 -0.08174 -0.11422 ...
     ##  - attr(*, "source")= chr "ulam posterior from object"
 
 ``` r
@@ -654,32 +239,34 @@ names(samples)
 ### Visualizing the posterior
 
 We can plot histograms directly from the samples. To do this with
-`ggplot`, we first need the samples in a dataframe. We can go one step
-further, converting the dataframe to tidy format (using `pivot_longer`
-from `tidyr`) and then using `facet_wrap` to plot histograms for all 4
-parameters. First, make a copy of the samples in a dataframe data
-structure (instead of the default list structure).
+`ggplot`, we first need the samples in a dataframe instead of the
+default list structure. We’ll copy the samples to a dataframe.
 
 ``` r
 samplesdf <- data.frame(samples)
 head(samplesdf)
 ```
 
-    ##    beta_0   beta_1    beta_2     beta_3
-    ## 1 1.55167 0.672210 -0.332706  0.0770840
-    ## 2 1.56273 0.617621 -0.265841  0.0907972
-    ## 3 1.58350 0.631843 -0.242726  0.0851762
-    ## 4 1.55169 0.615584 -0.265099 -0.0103366
-    ## 5 1.60682 0.661974 -0.283228 -0.0639876
-    ## 6 1.55401 0.566296 -0.398892  0.1092310
+    ##    beta_0   beta_1    beta_2      beta_3
+    ## 1 1.56427 0.484861 -0.398477  0.00739028
+    ## 2 1.64303 0.578886 -0.300128  0.04207150
+    ## 3 1.43089 0.755010 -0.296927 -0.05913350
+    ## 4 1.60051 0.630478 -0.208942 -0.08173650
+    ## 5 1.46616 0.686051 -0.255783 -0.11422400
+    ## 6 1.49541 0.669552 -0.268499  0.04869490
 
-Plot the histograms
+We can go one step further, converting the dataframe to tidy format
+(using `pivot_longer()` from `tidyr`) and then using `facet_wrap()` to
+plot histograms for all 4 parameters in one `ggplot`. We’ll also use
+`after_stat(density)` to make histograms scaled so the total probability
+(area under the bars) is 1; we are effectively plotting the probability
+density.
 
 ``` r
 samplesdf |> 
     pivot_longer(cols=everything(), names_to="parameter", values_to="sample_value") |> 
     ggplot() +
-    geom_histogram(mapping=aes(x=sample_value, y=after_stat(density)), bins=75) +
+    geom_histogram(aes(x=sample_value, y=after_stat(density)), bins=75) +
     facet_wrap(vars(parameter), scales="free")
 ```
 
@@ -688,27 +275,21 @@ samplesdf |>
 These histograms are not merely diagnostic. *The posterior distribution
 is the full inference for a parameter*. Diagnostically, we want to ask
 if the samples are giving us a good picture of the posterior
-distribution. These look very nice. We see that the distributions are
-roughly symmetric (statistical theory for these types of models suggests
-the posterior would be approximately Normal) and quite smooth (not
-noisy) due to the large number of samples.
+distribution. These histograms look very nice. We see that the
+distributions are roughly symmetric (statistical theory for these types
+of models suggests the posterior would be approximately Normal) and
+quite smooth (not noisy) due to the large number of samples. Notably,
+the tails are quite smooth.
 
 Sometimes you might only want one of the histograms, in which case you
-can do it quickly and succinctly by using `hist` from base plot (not
-shown).
+can do it quickly and succinctly using `hist` from base plot, or an
+abbreviated ggplot (not shown).
 
 ``` r
 hist(samples$beta_0, breaks=75)
+ggplot() + 
+    geom_histogram(aes(samples$beta_0), bins=75)
 ```
-
-Here’s a graphical summary of the parameters using the `rethinking` plot
-method. This shows 89% intervals by default.
-
-``` r
-plot(bysfitHxL)
-```
-
-![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 Check the traceplot to confirm convergence and check the behavior.
 
@@ -716,7 +297,7 @@ Check the traceplot to confirm convergence and check the behavior.
 traceplot(bysfitHxL)
 ```
 
-![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 We’ll dive into more diagnostic checks for MCMC chains and the model in
 a later script.
@@ -732,28 +313,28 @@ HPDI(samples$beta_0, prob=0.95)
 ```
 
     ##   |0.95   0.95| 
-    ## 1.33281 1.73156
+    ## 1.33284 1.73347
 
 ``` r
 HPDI(samples$beta_1, prob=0.95)
 ```
 
     ##    |0.95    0.95| 
-    ## 0.384477 0.877170
+    ## 0.387577 0.882389
 
 ``` r
 HPDI(samples$beta_2, prob=0.95)
 ```
 
     ##      |0.95      0.95| 
-    ## -0.5049220 -0.0759028
+    ## -0.5035680 -0.0723188
 
 ``` r
 HPDI(samples$beta_3, prob=0.95)
 ```
 
     ##     |0.95     0.95| 
-    ## -0.291906  0.243675
+    ## -0.284957  0.253357
 
 These are almost the same as the CPIs (in the `precis` table above) due
 to the symmetric posteriors and our large set of samples.
@@ -768,8 +349,8 @@ this way.
 
 ``` r
 # Initialize a grid of latitudes, scaled the same as we scaled the data
-lat_upr <- (45 - mean_lat) / sd_lat
 lat_lwr <- (41.92 - mean_lat) / sd_lat
+lat_upr <- (45 - mean_lat) / sd_lat
 latitude <- seq(from=lat_lwr, to=lat_upr, length.out=50)
 
 # Initialize storage
@@ -850,23 +431,24 @@ dashed lines show the posterior predictive interval.
 bfc <- c("#d95f02", "#1b9e77") #bog & forest colors
 preds |>
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
+    geom_ribbon(aes(x=latitude, ymin=mulo95, ymax=muhi95, fill=habitat),
                 alpha=0.2) +
-    geom_point(data=ant, mapping=aes(x=latitude, y=richness, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=mnmu, col=habitat)) +
-    geom_line(mapping=aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
-    geom_line(mapping=aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=mnmu, col=habitat)) +
+    geom_line(aes(x=latitude, y=ppdlo95, col=habitat), lty=2) +
+    geom_line(aes(x=latitude, y=ppdhi95, col=habitat), lty=2) +
+    geom_point(data=ant, aes(x=latitude, y=richness, col=habitat)) +
     annotate("text", x=42.7, y=3.3, label="Bog", col=bfc[1]) +
     annotate("text", x=43.85, y=9.5, label="Forest", col=bfc[2]) +
     scale_fill_manual(values=bfc) +
     scale_color_manual(values=bfc) +
     scale_y_continuous(breaks=seq(0, 20, 4), minor_breaks=seq(0, 20, 2)) +
+    coord_cartesian(ylim=c(0, 20)) +
     xlab("Latitude (degrees north)") +
     ylab("Ant species richness") +
     theme(legend.position="none")
 ```
 
-![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 Notice that the intervals for forest are wider than for bog. This is
 because the uncertainty scales with the mean of the response. Also
@@ -876,6 +458,8 @@ discrete steps. This is because the data generating process is discrete
 fewer iterations, Monte Carlo error would be greater and we would see a
 few blips in the intervals for the predictive distribution and some
 wiggles in the mean intervals.
+
+### Scientific questions
 
 Let’s consider now our original three scientific questions. We can
 answer question 1: **How does species richness vary with latitude?** The
@@ -897,14 +481,14 @@ this parameter is (repeating here from earlier):
 mean(samples$beta_3)
 ```
 
-    ## [1] -0.02457277
+    ## [1] -0.02542328
 
 ``` r
 HPDI(samples$beta_3, prob=0.95)
 ```
 
     ##     |0.95     0.95| 
-    ## -0.291906  0.243675
+    ## -0.284957  0.253357
 
 Finally, we can’t properly answer question 3: **How different is species
 richness between habitats?** We can see from the plot above that mean
@@ -923,7 +507,7 @@ latitudes. These differences are a function of the parameters, so we can
 half of this code is substantially the same as above; the main action is
 at the line that calculates the difference. The object `diff` contains
 the posterior samples for the difference in mean richness at a given
-altitude. I found the CPI to be a good and stable estimate of the
+latitude. I found the CPI to be a good and stable estimate of the
 credible interval.
 
 ``` r
@@ -955,8 +539,8 @@ for ( i in 1:n ) {
     
     # Mean and intervals of these samples
     forest_bog_diff[i,1] <- mean(diff)
-    forest_bog_diff[i,2:3] <- HPDI(diff, prob=0.95)
-    #forest_bog_diff[i,2:3] <- quantile(diff, prob=c(0.025,0.975)) #CPI
+    #forest_bog_diff[i,2:3] <- HPDI(diff, prob=0.95)
+    forest_bog_diff[i,2:3] <- quantile(diff, prob=c(0.025,0.975)) #CPI
 
 }
 
@@ -976,15 +560,15 @@ hair above in some runs of the stochastic sampler.
 ``` r
 diff_df |> 
     ggplot() +
-    geom_ribbon(mapping=aes(x=latitude, ymin=difflo95, ymax=diffhi95),
+    geom_ribbon(aes(x=latitude, ymin=difflo95, ymax=diffhi95),
         alpha=0.2) +
-    geom_line(mapping=aes(x=latitude, y=mndiff)) +
+    geom_line(aes(x=latitude, y=mndiff)) +
     coord_cartesian(ylim=c(0,8.3)) +
     xlab("Latitude (degrees north)") +
     ylab("Difference in species richness (forest - bog)")
 ```
 
-![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](11_3_ants_bayes_GLM_ulam_derived_quantities_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 Now we have quantitatively answered question 3: **How different is
 species richness between habitats?** We can see how the difference
