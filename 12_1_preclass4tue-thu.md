@@ -48,9 +48,11 @@ Next, expand and finalize your proposal. I will first review your bullet points 
 
 When describing your study and data, consider these critical design considerations:
 
-* replication
-* randomization
+* replication (how many, at what scales is the replication applied?)
+* randomization (how were data points collected?)
 * controls
+
+Your data don't need to have all of these elements but if they do, you should describe them.
 
 Save as a markdown or text file to your repo and **push to GitHub by Thursday before class** so we can discuss it together in our 1:1 meeting on Thursday.
 
