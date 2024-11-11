@@ -35,3 +35,4 @@ Below is a running checklist of all the homework marked as **push to GitHub** th
 - [ ] week 8 submitted in `.R` and `.md` formats
 - [ ] week 9 Rosenbluth algorithm submitted in `.R` and `.md` formats
 - [ ] Week 10 your simple linear dataset model checking in `.R` and `.md`
+- [ ] Week 10 individual project preliminary ideas

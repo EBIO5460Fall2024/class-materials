@@ -212,20 +212,23 @@ Detailed topics for each week
 
 ## Week 10
 
+* Visualization
+  * Theory
+  
+  * Grammar of graphics (GOG) theory
+  
+  * GOG with any plotting tools (including base R)
+  
+  * GOG with ggplot
+  
 * Model checking
   * Evaluating model assumptions
   * Assessing training robustness
   * Residuals, leverage, outliers, QQ plots, nonlinearity, non-constant variance
   * Leave one out (case deletion) algorithm for influence
-
 * Generalized linear models (GLMs)
   * Link functions
   * Data distributions
-
-* GLMs: ant data case study
-  * Bayesian analysis using `ulam` and `stan_glm()`
-  * Frequentist/likelihood analysis using `glm()` and bootstrap
-
 * Homework
   * Skills: Data manipulation with `dplyr`
   * Mini lecture: Model checking
@@ -236,20 +239,19 @@ Detailed topics for each week
 
 ## Week 11
 
-* Introduction to multilevel models (Normal, linear)
-  * Grouping variables
-  * Fixed vs random effects
-  * Partial pooling and shrinkage
-  * Using `lmer()` and `stan_lmer()`
+* GLMs: ant data case study
+  * Bayesian analysis using `ulam` and `stan_glm()`
+  * Frequentist/likelihood analysis using `glm()` and bootstrap
+  * Derived quantities from posterior or bootstrap samples
 
-* Data visualization
-  * Exploratory data analysis of hierarchical data
-  * Using `dplyr` and `ggplot`
+* Model checking for Bayesian models
+  * MCMC diagnostics
+  * Posterior predictive checks
 
-* Art of modeling and workflow algorithm
-  * Sketch the data design
-  * Write the equations
-  * Linear model syntax
+* Priors in Bayesian models
+  * From flat to informative
+  * How to decide?
+  * Visualizing priors and prior predictive distribution
 
 * Homework
   * Skills: Tidy data
@@ -258,18 +260,31 @@ Detailed topics for each week
 
 
 
+
 ## Week 12
 
+* Introduction to multilevel models (Normal, linear)
+  * Grouping variables
+  * Fixed vs random effects
+  * Partial pooling and shrinkage
+  * Using `lmer()` and `stan_lmer()`
+* Data visualization
+  * Exploratory data analysis of hierarchical data
+  * Using `dplyr` and `ggplot`
+* Art of modeling and workflow algorithm
+  * Sketch the data design
+  * Write the equations
+  * Linear model syntax
 * Radon multilevel case study
   * Likelihood and Bayesian algorithms
   * Predictor variables at different scales
   * Alternative parameterizations
   * Credible and prediction intervals
-
 * Homework
   * Skills: R markdown
+  * Reading: Study design
+  * Reading: Multilevel models
   * Individual project: Project proposal
-  * Individual project: Begin EDA using dplyr and ggplot
 
 
 
@@ -288,6 +303,7 @@ Detailed topics for each week
 * Homework
   * Skills: Using LaTeX to write equations
   * Individual project: Modeling predictors at different scales
+    * Begin EDA using dplyr and ggplot
     * Scales of grouping & predictor variables
     * Sketch data structure, write math, write R model formulae
 
