@@ -213,7 +213,7 @@ mcmc_hist(ppd, pars=sample(colnames(ppd), 6), breaks=seq(-0.5,30.5))
 We see from the selection of plots that the posterior predictive distribution is discrete (Poisson) because the data generating process is Poisson by assumption. The 95% prediction intervals (here CPI for stability) are then
 
 ```{r}
-prediction_intervals <- predictive_interval(ppd)
+prediction_intervals <- predictive_interval(ppd, prob=0.95)
 prediction_intervals <- data.frame(prediction_intervals)
 names(prediction_intervals) <- c("ppdlo95", "ppdhi95")
 ```
@@ -247,7 +247,8 @@ preds |>
     ylab("Ant species richness") +
     theme(legend.position="none")
 ```
-This is substantially similar to the inference from our `ulam` script and the frequentist analysis. However, the regression intervals and prediction intervals are narrower, presumably because the default priors are a little bit informative. We'll look at the priors next.
+
+This is substantially similar to the inference from our `ulam` script and the frequentist analysis. However, the regression intervals and prediction intervals are slightly narrower, presumably because the default priors are a little bit informative. We'll look at the priors next.
 
 
 ## Summary

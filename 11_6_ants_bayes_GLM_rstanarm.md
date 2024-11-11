@@ -443,7 +443,7 @@ is Poisson by assumption. The 95% prediction intervals (here CPI for
 stability) are then
 
 ``` r
-prediction_intervals <- predictive_interval(ppd)
+prediction_intervals <- predictive_interval(ppd, prob=0.95)
 prediction_intervals <- data.frame(prediction_intervals)
 names(prediction_intervals) <- c("ppdlo95", "ppdhi95")
 ```
@@ -478,10 +478,12 @@ preds |>
 ```
 
 ![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
 This is substantially similar to the inference from our `ulam` script
 and the frequentist analysis. However, the regression intervals and
-prediction intervals are narrower, presumably because the default priors
-are a little bit informative. We’ll look at the priors next.
+prediction intervals are slightly narrower, presumably because the
+default priors are a little bit informative. We’ll look at the priors
+next.
 
 ## Summary
 
