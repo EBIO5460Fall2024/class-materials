@@ -98,16 +98,16 @@ print(lnrad_mean_var, n=10) #n=Inf to print all rows
     ## # A tibble: 85 × 6
     ##    county     sample_size cty_mn cty_sd cty_se sample_size_jit
     ##    <fct>            <int>  <dbl>  <dbl>  <dbl>           <dbl>
-    ##  1 AITKIN               4  0.660  0.459  0.230            4.02
-    ##  2 ANOKA               52  0.833  0.770  0.107           52.2 
-    ##  3 BECKER               3  1.05   0.750  0.433            2.90
-    ##  4 BELTRAMI             7  1.14   0.968  0.366            6.96
-    ##  5 BENTON               4  1.25   0.424  0.212            3.99
-    ##  6 BIG STONE            3  1.51   0.516  0.298            3.08
-    ##  7 BLUE EARTH          14  1.91   0.553  0.148           14.1 
-    ##  8 BROWN                4  1.63   0.608  0.304            4.04
-    ##  9 CARLTON             10  0.931  0.615  0.194            9.95
-    ## 10 CARVER               6  1.20   1.90   0.777            5.84
+    ##  1 AITKIN               4  0.660  0.459  0.230            4.00
+    ##  2 ANOKA               52  0.833  0.770  0.107           52.1 
+    ##  3 BECKER               3  1.05   0.750  0.433            3.14
+    ##  4 BELTRAMI             7  1.14   0.968  0.366            7.11
+    ##  5 BENTON               4  1.25   0.424  0.212            3.84
+    ##  6 BIG STONE            3  1.51   0.516  0.298            3.05
+    ##  7 BLUE EARTH          14  1.91   0.553  0.148           13.9 
+    ##  8 BROWN                4  1.63   0.608  0.304            3.99
+    ##  9 CARLTON             10  0.931  0.615  0.194           10.1 
+    ## 10 CARVER               6  1.20   1.90   0.777            6.07
     ## # ℹ 75 more rows
 
 In printing the whole data frame I saw that there are three counties
@@ -133,7 +133,7 @@ lnrad_mean_var |>
     ## Warning: Removed 3 rows containing missing values or values outside the scale range
     ## (`geom_segment()`).
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 This plot is very similar to G&H Fig. 12.1a but not the same. The blue
 line is the completely pooled estimate (the overall mean). Some of the
@@ -163,7 +163,7 @@ Check the fitted model (diagnostic plots)
 plot(npfit,1:4,ask=FALSE)
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-4.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-9-4.png)<!-- -->
 
 The extended left tail, which has the 0 + 0.1 hack, is evident in the QQ
 plot but otherwise the diagnostics look good. Let’s also look at a
@@ -181,7 +181,7 @@ ggplot() +
     geom_line(data=norm_df, mapping=aes(x=x, y=y), col="red")
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 So, Normal looks like an adequate approximation for the errors.
 
@@ -207,7 +207,7 @@ gh12.1a <-
 gh12.1a
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 Apart from some unimportant details, this is the same as G&H Fig. 12.1a.
 The blue line is the complete pooling model (i.e. the overall mean).
@@ -251,7 +251,7 @@ other diagnostic options for multilevel likelihood models.
 plot(ppfit)
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 In the summary we now see estimates for two components (or levels, or
 strata) of variance: county (among counties) and residual (among houses
@@ -334,7 +334,7 @@ gh12.1b_ref <-
 grid.arrange(gh12.1a_ref, gh12.1b_ref, nrow = 1)
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 The right panel is the fitted multilevel model compared to our previous
 fit of the no pooling model in the left panel. In the multilevel model
@@ -372,96 +372,96 @@ print(summary(ppfit_bayes)[,c("mean","sd","n_eff","Rhat")], digits=3)
 ```
 
     ##                                              mean     sd n_eff  Rhat
-    ## (Intercept)                              1.31e+00 0.0515  1556 1.002
-    ## b[(Intercept) county:AITKIN]            -2.47e-01 0.2488  4921 0.999
-    ## b[(Intercept) county:ANOKA]             -4.23e-01 0.1163  3481 1.000
-    ## b[(Intercept) county:BECKER]            -8.39e-02 0.2603  5837 1.000
-    ## b[(Intercept) county:BELTRAMI]          -9.53e-02 0.2226  4915 1.000
-    ## b[(Intercept) county:BENTON]            -2.86e-02 0.2471  5530 0.999
-    ## b[(Intercept) county:BIG_STONE]          6.20e-02 0.2551  6591 1.001
-    ## b[(Intercept) county:BLUE_EARTH]         4.01e-01 0.1841  4502 1.001
-    ## b[(Intercept) county:BROWN]              1.20e-01 0.2483  6422 0.999
-    ## b[(Intercept) county:CARLTON]           -2.27e-01 0.2045  5461 1.000
-    ## b[(Intercept) county:CARVER]            -5.43e-02 0.2266  4492 1.000
-    ## b[(Intercept) county:CASS]               4.06e-02 0.2380  5579 1.000
-    ## b[(Intercept) county:CHIPPEWA]           1.66e-01 0.2437  5508 1.000
-    ## b[(Intercept) county:CHISAGO]           -1.31e-01 0.2267  5736 1.000
-    ## b[(Intercept) county:CLAY]               3.18e-01 0.1809  3909 0.999
-    ## b[(Intercept) county:CLEARWATER]        -1.30e-01 0.2524  4641 1.000
-    ## b[(Intercept) county:COOK]              -1.54e-01 0.2675  4897 1.000
-    ## b[(Intercept) county:COTTONWOOD]        -2.23e-01 0.2450  5702 1.000
-    ## b[(Intercept) county:CROW_WING]         -2.38e-01 0.1904  5560 0.999
-    ## b[(Intercept) county:DAKOTA]            -1.70e-02 0.1078  3253 1.000
-    ## b[(Intercept) county:DODGE]              1.51e-01 0.2565  5951 1.000
-    ## b[(Intercept) county:DOUGLAS]            1.96e-01 0.2078  4770 0.999
-    ## b[(Intercept) county:FARIBAULT]         -3.77e-01 0.2314  4108 0.999
-    ## b[(Intercept) county:FILLMORE]          -6.13e-02 0.2730  5325 1.001
-    ## b[(Intercept) county:FREEBORN]           3.62e-01 0.2068  5090 1.000
-    ## b[(Intercept) county:GOODHUE]            3.63e-01 0.1811  5057 1.000
-    ## b[(Intercept) county:HENNEPIN]          -2.52e-02 0.0894  2695 1.001
-    ## b[(Intercept) county:HOUSTON]            1.09e-01 0.2255  5475 1.000
-    ## b[(Intercept) county:HUBBARD]           -2.12e-01 0.2414  4303 1.000
-    ## b[(Intercept) county:ISANTI]            -7.95e-02 0.2536  4791 1.000
-    ## b[(Intercept) county:ITASCA]            -2.40e-01 0.1938  5368 1.000
-    ## b[(Intercept) county:JACKSON]            3.07e-01 0.2381  4611 1.000
-    ## b[(Intercept) county:KANABEC]           -2.98e-02 0.2389  5566 1.000
-    ## b[(Intercept) county:KANDIYOHI]          2.85e-01 0.2552  4699 0.999
-    ## b[(Intercept) county:KITTSON]           -6.27e-02 0.2688  6472 0.999
-    ## b[(Intercept) county:KOOCHICHING]       -4.62e-01 0.2254  4852 0.999
-    ## b[(Intercept) county:LAC_QUI_PARLE]      2.98e-01 0.2867  3799 1.001
-    ## b[(Intercept) county:LAKE]              -5.65e-01 0.2211  3462 1.000
-    ## b[(Intercept) county:LAKE_OF_THE_WOODS]  7.89e-02 0.2451  5135 0.999
-    ## b[(Intercept) county:LE_SUEUR]           1.25e-01 0.2339  5343 1.000
-    ## b[(Intercept) county:LINCOLN]            3.11e-01 0.2555  5337 0.999
-    ## b[(Intercept) county:LYON]               3.03e-01 0.2209  5194 0.999
-    ## b[(Intercept) county:MAHNOMEN]           1.96e-03 0.2890  5571 1.000
-    ## b[(Intercept) county:MARSHALL]          -6.58e-02 0.1977  6123 0.999
-    ## b[(Intercept) county:MARTIN]            -1.91e-01 0.2167  5445 0.999
-    ## b[(Intercept) county:MCLEOD]            -1.57e-01 0.1851  5049 1.000
-    ## b[(Intercept) county:MEEKER]            -3.69e-02 0.2334  5657 0.999
-    ## b[(Intercept) county:MILLE_LACS]        -1.90e-01 0.2827  5508 0.999
-    ## b[(Intercept) county:MORRISON]          -1.37e-01 0.2060  4745 0.999
-    ## b[(Intercept) county:MOWER]              1.82e-01 0.1815  5283 1.001
-    ## b[(Intercept) county:MURRAY]             1.56e-01 0.2910  5299 0.999
-    ## b[(Intercept) county:NICOLLET]           3.27e-01 0.2620  5072 1.000
-    ## b[(Intercept) county:NOBLES]             1.93e-01 0.2533  5835 0.999
-    ## b[(Intercept) county:NORMAN]            -9.68e-02 0.2605  5599 1.000
-    ## b[(Intercept) county:OLMSTED]           -7.87e-02 0.1530  4439 1.001
-    ## b[(Intercept) county:OTTER_TAIL]         1.89e-02 0.2086  5554 1.000
-    ## b[(Intercept) county:PENNINGTON]        -2.18e-01 0.2610  4556 1.000
-    ## b[(Intercept) county:PINE]              -3.16e-01 0.2353  3826 1.000
-    ## b[(Intercept) county:PIPESTONE]          1.38e-01 0.2474  5877 0.999
-    ## b[(Intercept) county:POLK]               1.98e-02 0.2487  5319 1.000
-    ## b[(Intercept) county:POPE]              -9.98e-03 0.2664  5795 1.000
-    ## b[(Intercept) county:RAMSEY]            -1.83e-01 0.1359  4208 1.000
-    ## b[(Intercept) county:REDWOOD]            2.24e-01 0.2379  4852 0.999
-    ## b[(Intercept) county:RENVILLE]           3.82e-02 0.2558  4836 1.000
-    ## b[(Intercept) county:RICE]               2.93e-01 0.1957  5122 1.000
-    ## b[(Intercept) county:ROCK]              -1.17e-02 0.2810  5613 1.000
-    ## b[(Intercept) county:ROSEAU]            -3.68e-02 0.1783  4894 1.000
-    ## b[(Intercept) county:SCOTT]              1.77e-01 0.1842  5374 1.000
-    ## b[(Intercept) county:SHERBURNE]         -1.24e-01 0.2089  4574 0.999
-    ## b[(Intercept) county:SIBLEY]            -3.20e-02 0.2443  5408 0.999
-    ## b[(Intercept) county:ST_LOUIS]          -5.11e-01 0.0871  2793 1.000
-    ## b[(Intercept) county:STEARNS]            4.73e-02 0.1450  4647 1.001
-    ## b[(Intercept) county:STEELE]             1.57e-01 0.1991  4699 1.000
-    ## b[(Intercept) county:STEVENS]            1.13e-01 0.2702  6312 1.000
-    ## b[(Intercept) county:SWIFT]             -1.29e-01 0.2478  5831 1.000
-    ## b[(Intercept) county:TODD]               5.94e-02 0.2538  6540 1.000
-    ## b[(Intercept) county:TRAVERSE]           2.02e-01 0.2529  5880 1.000
-    ## b[(Intercept) county:WABASHA]            2.08e-01 0.2203  5365 1.000
-    ## b[(Intercept) county:WADENA]            -1.39e-01 0.2392  5102 0.999
-    ## b[(Intercept) county:WASECA]            -3.31e-01 0.2535  4103 1.000
-    ## b[(Intercept) county:WASHINGTON]        -5.10e-02 0.1194  3351 1.000
-    ## b[(Intercept) county:WATONWAN]           2.86e-01 0.2726  4380 1.000
-    ## b[(Intercept) county:WILKIN]             1.28e-01 0.2898  5561 0.999
-    ## b[(Intercept) county:WINONA]             9.63e-02 0.1804  5805 0.999
-    ## b[(Intercept) county:WRIGHT]             1.82e-01 0.1860  4503 1.000
-    ## b[(Intercept) county:YELLOW_MEDICINE]   -3.43e-02 0.2731  6016 1.000
-    ## sigma                                    7.98e-01 0.0192  4069 1.000
-    ## Sigma[county:(Intercept),(Intercept)]    1.01e-01 0.0318  1277 1.001
-    ## mean_PPD                                 1.22e+00 0.0377  4559 1.000
-    ## log-posterior                           -1.22e+03 9.4012   772 1.003
+    ## (Intercept)                              1.31e+00 0.0497  1177 1.002
+    ## b[(Intercept) county:AITKIN]            -2.51e-01 0.2536  5129 1.000
+    ## b[(Intercept) county:ANOKA]             -4.21e-01 0.1135  3002 1.000
+    ## b[(Intercept) county:BECKER]            -7.91e-02 0.2579  5205 1.000
+    ## b[(Intercept) county:BELTRAMI]          -8.16e-02 0.2203  4247 0.999
+    ## b[(Intercept) county:BENTON]            -2.46e-02 0.2522  5920 1.000
+    ## b[(Intercept) county:BIG_STONE]          7.17e-02 0.2566  5311 1.000
+    ## b[(Intercept) county:BLUE_EARTH]         4.04e-01 0.1797  4531 1.000
+    ## b[(Intercept) county:BROWN]              1.28e-01 0.2467  5271 1.000
+    ## b[(Intercept) county:CARLTON]           -2.29e-01 0.1996  5219 0.999
+    ## b[(Intercept) county:CARVER]            -5.29e-02 0.2333  4893 1.001
+    ## b[(Intercept) county:CASS]               3.71e-02 0.2367  4869 1.000
+    ## b[(Intercept) county:CHIPPEWA]           1.57e-01 0.2457  5764 1.000
+    ## b[(Intercept) county:CHISAGO]           -1.29e-01 0.2227  5315 1.000
+    ## b[(Intercept) county:CLAY]               3.19e-01 0.1809  4281 1.001
+    ## b[(Intercept) county:CLEARWATER]        -1.30e-01 0.2502  4835 0.999
+    ## b[(Intercept) county:COOK]              -1.50e-01 0.2866  5400 1.000
+    ## b[(Intercept) county:COTTONWOOD]        -2.21e-01 0.2565  4351 0.999
+    ## b[(Intercept) county:CROW_WING]         -2.39e-01 0.1918  3803 1.001
+    ## b[(Intercept) county:DAKOTA]            -1.60e-02 0.1036  3064 1.000
+    ## b[(Intercept) county:DODGE]              1.56e-01 0.2617  5573 1.000
+    ## b[(Intercept) county:DOUGLAS]            1.94e-01 0.2038  5618 1.000
+    ## b[(Intercept) county:FARIBAULT]         -3.81e-01 0.2391  4883 1.000
+    ## b[(Intercept) county:FILLMORE]          -5.84e-02 0.2744  5312 0.999
+    ## b[(Intercept) county:FREEBORN]           3.60e-01 0.2122  4480 1.000
+    ## b[(Intercept) county:GOODHUE]            3.61e-01 0.1864  4461 1.001
+    ## b[(Intercept) county:HENNEPIN]          -2.32e-02 0.0912  2419 1.001
+    ## b[(Intercept) county:HOUSTON]            1.06e-01 0.2198  5498 1.000
+    ## b[(Intercept) county:HUBBARD]           -2.14e-01 0.2393  4623 1.000
+    ## b[(Intercept) county:ISANTI]            -8.40e-02 0.2562  5179 0.999
+    ## b[(Intercept) county:ITASCA]            -2.39e-01 0.2007  5006 0.999
+    ## b[(Intercept) county:JACKSON]            3.09e-01 0.2421  5095 1.000
+    ## b[(Intercept) county:KANABEC]           -2.37e-02 0.2390  5576 1.000
+    ## b[(Intercept) county:KANDIYOHI]          2.85e-01 0.2491  4149 1.000
+    ## b[(Intercept) county:KITTSON]           -5.78e-02 0.2611  6160 0.999
+    ## b[(Intercept) county:KOOCHICHING]       -4.65e-01 0.2281  4284 1.000
+    ## b[(Intercept) county:LAC_QUI_PARLE]      3.07e-01 0.2764  4142 1.000
+    ## b[(Intercept) county:LAKE]              -5.74e-01 0.2210  4562 1.000
+    ## b[(Intercept) county:LAKE_OF_THE_WOODS]  7.93e-02 0.2445  5745 1.000
+    ## b[(Intercept) county:LE_SUEUR]           1.25e-01 0.2416  6190 1.000
+    ## b[(Intercept) county:LINCOLN]            3.10e-01 0.2470  4715 1.000
+    ## b[(Intercept) county:LYON]               3.12e-01 0.2131  4752 1.000
+    ## b[(Intercept) county:MAHNOMEN]           1.28e-02 0.2974  5127 1.000
+    ## b[(Intercept) county:MARSHALL]          -6.47e-02 0.2066  5694 1.000
+    ## b[(Intercept) county:MARTIN]            -1.94e-01 0.2208  5167 1.000
+    ## b[(Intercept) county:MCLEOD]            -1.55e-01 0.1818  4565 1.000
+    ## b[(Intercept) county:MEEKER]            -3.94e-02 0.2301  5462 1.000
+    ## b[(Intercept) county:MILLE_LACS]        -1.88e-01 0.2808  4872 1.000
+    ## b[(Intercept) county:MORRISON]          -1.39e-01 0.2046  5084 1.000
+    ## b[(Intercept) county:MOWER]              1.82e-01 0.1834  4198 1.000
+    ## b[(Intercept) county:MURRAY]             1.63e-01 0.2968  4663 1.000
+    ## b[(Intercept) county:NICOLLET]           3.29e-01 0.2599  5210 1.000
+    ## b[(Intercept) county:NOBLES]             1.95e-01 0.2663  4526 0.999
+    ## b[(Intercept) county:NORMAN]            -8.88e-02 0.2671  5972 1.000
+    ## b[(Intercept) county:OLMSTED]           -7.42e-02 0.1534  4503 1.001
+    ## b[(Intercept) county:OTTER_TAIL]         2.15e-02 0.2096  5100 0.999
+    ## b[(Intercept) county:PENNINGTON]        -2.22e-01 0.2663  5472 0.999
+    ## b[(Intercept) county:PINE]              -3.14e-01 0.2354  4573 0.999
+    ## b[(Intercept) county:PIPESTONE]          1.45e-01 0.2477  5492 0.999
+    ## b[(Intercept) county:POLK]               2.22e-02 0.2554  5285 1.000
+    ## b[(Intercept) county:POPE]              -8.00e-03 0.2705  5591 1.000
+    ## b[(Intercept) county:RAMSEY]            -1.81e-01 0.1348  3974 1.000
+    ## b[(Intercept) county:REDWOOD]            2.29e-01 0.2358  5012 0.999
+    ## b[(Intercept) county:RENVILLE]           3.11e-02 0.2633  4831 1.000
+    ## b[(Intercept) county:RICE]               2.90e-01 0.1932  4070 1.000
+    ## b[(Intercept) county:ROCK]              -1.10e-02 0.2791  5114 1.000
+    ## b[(Intercept) county:ROSEAU]            -3.79e-02 0.1764  5279 1.000
+    ## b[(Intercept) county:SCOTT]              1.80e-01 0.1825  5298 1.000
+    ## b[(Intercept) county:SHERBURNE]         -1.25e-01 0.2073  5187 1.001
+    ## b[(Intercept) county:SIBLEY]            -2.29e-02 0.2525  5158 1.000
+    ## b[(Intercept) county:ST_LOUIS]          -5.13e-01 0.0874  2677 1.001
+    ## b[(Intercept) county:STEARNS]            5.28e-02 0.1476  4212 1.000
+    ## b[(Intercept) county:STEELE]             1.61e-01 0.2010  3954 1.000
+    ## b[(Intercept) county:STEVENS]            1.11e-01 0.2786  4968 0.999
+    ## b[(Intercept) county:SWIFT]             -1.21e-01 0.2549  5055 1.000
+    ## b[(Intercept) county:TODD]               5.54e-02 0.2522  6308 1.000
+    ## b[(Intercept) county:TRAVERSE]           1.93e-01 0.2588  5663 0.999
+    ## b[(Intercept) county:WABASHA]            2.08e-01 0.2190  5092 1.000
+    ## b[(Intercept) county:WADENA]            -1.40e-01 0.2355  4983 1.000
+    ## b[(Intercept) county:WASECA]            -3.33e-01 0.2527  4417 1.000
+    ## b[(Intercept) county:WASHINGTON]        -4.97e-02 0.1145  2747 1.000
+    ## b[(Intercept) county:WATONWAN]           2.84e-01 0.2730  4947 1.000
+    ## b[(Intercept) county:WILKIN]             1.28e-01 0.2905  5467 1.000
+    ## b[(Intercept) county:WINONA]             9.73e-02 0.1787  4804 1.000
+    ## b[(Intercept) county:WRIGHT]             1.87e-01 0.1786  5571 1.000
+    ## b[(Intercept) county:YELLOW_MEDICINE]   -3.62e-02 0.2781  5325 1.000
+    ## sigma                                    7.98e-01 0.0195  4994 1.000
+    ## Sigma[county:(Intercept),(Intercept)]    1.01e-01 0.0308  1478 1.001
+    ## mean_PPD                                 1.22e+00 0.0364  4146 1.000
+    ## log-posterior                           -1.22e+03 9.1059   979 1.004
 
 Diagnostics: We have previously made trace plots and histograms manually
 from samples. A handy tool is the shiny app included with `rstanarm`.
@@ -622,7 +622,7 @@ gh12.1b_bayes <-
 grid.arrange(gh12.1b, gh12.1b_bayes, nrow = 1)
 ```
 
-![](12_4_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](12_5_radon_multilevel_M1_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 The maximum likelihood (left) and Bayesian model (right) estimates are
 practically identical. This is not surprising, since the priors in the

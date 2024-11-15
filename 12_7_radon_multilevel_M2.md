@@ -82,7 +82,7 @@ Check the fitted model (diagnostic plots)
 plot(poolfit, 1:4, ask=FALSE)
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
 
 No problems here that we haven’t already discovered.
 
@@ -141,7 +141,7 @@ plot(npfit, 1:4, ask=FALSE)
     ## Warning: not plotting observations with leverage one:
     ##   450, 509, 891
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
 
 Nothing terribly concerning in the diagnostics, although we’d want to
 check out the warnings about 3 points with high leverage. We’re going to
@@ -287,7 +287,7 @@ radon_dat|>
          title="No pooling: estimates from linear model fit")
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 The features to notice here are that the slope (measuring the difference
 in radon between floors) is the same across counties but the estimated
@@ -320,7 +320,7 @@ gh12.3a <-
 gh12.3a
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 The feature to notice here is how the uncertainty intervals are large
 for counties with small sample sizes and decrease with sample size.
@@ -343,7 +343,7 @@ Residual plot looks fine:
 plot(ppfit)
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 Examine the parameter estimates:
 
@@ -415,7 +415,7 @@ radon_dat|>
          title="Partial pooling (dashed): multilevel model, max likelihood estimates")
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 Partial pooling estimates (dashed blue line) compared to the no pooling
 estimates (solid blue line), and the complete pooling estimate (red
@@ -455,7 +455,7 @@ Plot no pooling vs partial pooling side by side
 grid.arrange(gh12.3a, gh12.3b, nrow = 1)
 ```
 
-![](12_2_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](12_7_radon_multilevel_M2_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 The estimates for the county intercepts (which is the estimated
 ln(radon) level in a house basement) are shrunk toward the county-scale

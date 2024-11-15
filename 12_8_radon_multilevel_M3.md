@@ -80,7 +80,7 @@ plot(x=sort(uranium_dat$logu), y=1:85, yaxt="n",
      ylab="County (ordered)", xlab="Log( uranium (ppm) )")
 ```
 
-![](12_3_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](12_8_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 I don’t see anything untoward in this plot.
 
@@ -102,57 +102,57 @@ radon_dat <- radon_dat |>
 radon_dat[sample(1:nrow(radon_dat), 50),] #print a sample of 50 rows to check
 ```
 
-    ##        floor radon      county  log_radon floor_x     uppm        logu
-    ## 718 basement   1.4    ST LOUIS  0.3364722       0 0.622088 -0.47467372
-    ## 36  basement   4.2       ANOKA  1.4350845       0 0.428565 -0.84731286
-    ## 337 basement   2.4    HENNEPIN  0.8754687       0 0.907991 -0.09652081
-    ## 559 basement   1.5        PINE  0.4054651       0 0.849343 -0.16329217
-    ## 721 basement   5.0    ST LOUIS  1.6094379       0 0.622088 -0.47467372
-    ## 5   basement   3.1       ANOKA  1.1314021       0 0.428565 -0.84731286
-    ## 887 basement   6.0  WASHINGTON  1.7917595       0 0.862876 -0.14748428
-    ## 591 basement   1.2      RAMSEY  0.1823216       0 0.658327 -0.41805351
-    ## 447 basement   8.9        LYON  2.1860513       0 1.483990  0.39473441
-    ## 785    first   1.0     STEARNS  0.0000000       1 1.123440  0.11639541
-    ## 701 basement   3.5    ST LOUIS  1.2527630       0 0.622088 -0.47467372
-    ## 916 basement   4.5      WRIGHT  1.5040774       0 0.913909 -0.09002427
-    ## 451    first   1.5    MARSHALL  0.4054651       1 1.013860  0.01376483
-    ## 794 basement   7.4     STEARNS  2.0014800       0 1.123440  0.11639541
-    ## 55  basement   1.9       ANOKA  0.6418539       0 0.428565 -0.84731286
-    ## 112 basement   4.0        CASS  1.3862944       0 0.544319 -0.60821981
-    ## 548 basement   3.2  OTTER TAIL  1.1631508       0 0.814867 -0.20473037
-    ## 652 basement   3.2   SHERBURNE  1.1631508       0 0.504879 -0.68343648
-    ## 796 basement   1.8     STEARNS  0.5877867       0 1.123440  0.11639541
-    ## 667 basement  11.0    ST LOUIS  2.3978953       0 0.622088 -0.47467372
-    ## 466 basement   1.5      MARTIN  0.4054651       0 1.180410  0.16586184
-    ## 663    first   0.5    ST LOUIS -0.6931472       1 0.622088 -0.47467372
-    ## 21  basement   1.8       ANOKA  0.5877867       0 0.428565 -0.84731286
-    ## 383 basement   2.2      ISANTI  0.7884574       0 0.471483 -0.75187223
-    ## 724 basement   1.2    ST LOUIS  0.1823216       0 0.622088 -0.47467372
-    ## 389 basement   2.6      ITASCA  0.9555114       0 0.515124 -0.66334763
-    ## 433 basement  12.5    LE SUEUR  2.5257286       0 1.214640  0.19444774
-    ## 788 basement  10.1     STEARNS  2.3125354       0 1.123440  0.11639541
-    ## 901 basement  11.3      WINONA  2.4248027       0 1.589170  0.46321187
-    ## 318 basement   8.4    HENNEPIN  2.1282317       0 0.907991 -0.09652081
-    ## 510 basement   8.1    NICOLLET  2.0918641       0 1.281520  0.24804687
-    ## 678 basement   8.7    ST LOUIS  2.1633230       0 0.622088 -0.47467372
-    ## 7   basement   1.5       ANOKA  0.4054651       0 0.428565 -0.84731286
-    ## 553    first   0.3  PENNINGTON -1.2039728       1 0.928646 -0.07402767
-    ## 412 basement   1.4 KOOCHICHING  0.3364722       0 0.414025 -0.88182892
-    ## 332 basement   7.6    HENNEPIN  2.0281482       0 0.907991 -0.09652081
-    ## 798 basement   2.6     STEARNS  0.9555114       0 1.123440  0.11639541
-    ## 609    first   5.8    RENVILLE  1.7578579       1 1.463130  0.38057798
-    ## 371 basement   8.5     HOUSTON  2.1400662       0 1.654550  0.50352907
-    ## 783 basement   1.3     STEARNS  0.2623643       0 1.123440  0.11639541
-    ## 457 basement  48.2    MARSHALL  3.8753590       0 1.013860  0.01376483
-    ## 690 basement   2.9    ST LOUIS  1.0647107       0 0.622088 -0.47467372
-    ## 251 basement  14.3     GOODHUE  2.6602595       0 1.217270  0.19661065
-    ## 6   basement   2.5       ANOKA  0.9162907       0 0.428565 -0.84731286
-    ## 495 basement   3.9    MORRISON  1.3609766       0 0.910987 -0.09322665
-    ## 216 basement   4.3      DAKOTA  1.4586150       0 0.976144 -0.02414516
-    ## 347 basement   3.1    HENNEPIN  1.1314021       0 0.907991 -0.09652081
-    ## 267    first   2.1    HENNEPIN  0.7419373       1 0.907991 -0.09652081
-    ## 574 basement   2.1      RAMSEY  0.7419373       0 0.658327 -0.41805351
-    ## 31  basement   4.5       ANOKA  1.5040774       0 0.428565 -0.84731286
+    ##        floor radon     county  log_radon floor_x     uppm        logu
+    ## 371 basement   8.5    HOUSTON  2.1400662       0 1.654550  0.50352907
+    ## 178 basement   8.2     DAKOTA  2.1041342       0 0.976144 -0.02414516
+    ## 492    first   3.0   MORRISON  1.0986123       1 0.910987 -0.09322665
+    ## 908 basement   2.1     WRIGHT  0.7419373       0 0.913909 -0.09002427
+    ## 580    first   1.6     RAMSEY  0.4700036       1 0.658327 -0.41805351
+    ## 132    first   2.5       CLAY  0.9162907       1 1.410270  0.34378118
+    ## 123    first   0.9       CLAY -0.1053605       1 1.410270  0.34378118
+    ## 294 basement   8.6   HENNEPIN  2.1517622       0 0.907991 -0.09652081
+    ## 228 basement   6.4    DOUGLAS  1.8562980       0 1.168490  0.15571232
+    ## 69     first   2.9     BENTON  1.0647107       1 0.866849 -0.14289048
+    ## 62  basement   5.7   BELTRAMI  1.7404662       0 0.552472 -0.59335253
+    ## 547    first  12.6 OTTER TAIL  2.5336968       1 0.814867 -0.20473037
+    ## 733 basement   3.6   ST LOUIS  1.2809338       0 0.622088 -0.47467372
+    ## 44     first   1.8      ANOKA  0.5877867       1 0.428565 -0.84731286
+    ## 548 basement   3.2 OTTER TAIL  1.1631508       0 0.814867 -0.20473037
+    ## 244 basement   4.2   FREEBORN  1.4350845       0 1.251330  0.22420699
+    ## 305 basement   3.9   HENNEPIN  1.3609766       0 0.907991 -0.09652081
+    ## 293 basement   1.5   HENNEPIN  0.4054651       0 0.907991 -0.09652081
+    ## 902 basement   7.6     WINONA  2.0281482       0 1.589170  0.46321187
+    ## 401 basement   3.8    KANABEC  1.3350011       0 0.948014 -0.05338601
+    ## 740 basement   0.6   ST LOUIS -0.5108256       0 0.622088 -0.47467372
+    ## 681 basement   8.7   ST LOUIS  2.1633230       0 0.622088 -0.47467372
+    ## 666 basement   4.6   ST LOUIS  1.5260563       0 0.622088 -0.47467372
+    ## 287 basement   3.9   HENNEPIN  1.3609766       0 0.907991 -0.09652081
+    ## 479 basement  10.6     MCLEOD  2.3608540       0 1.150760  0.14042259
+    ## 709 basement   1.5   ST LOUIS  0.4054651       0 0.622088 -0.47467372
+    ## 766 basement   2.1   ST LOUIS  0.7419373       0 0.622088 -0.47467372
+    ## 466 basement   1.5     MARTIN  0.4054651       0 1.180410  0.16586184
+    ## 303 basement   2.1   HENNEPIN  0.7419373       0 0.907991 -0.09652081
+    ## 476    first   1.6     MCLEOD  0.4700036       1 1.150760  0.14042259
+    ## 799 basement   3.7    STEARNS  1.3083328       0 1.123440  0.11639541
+    ## 457 basement  48.2   MARSHALL  3.8753590       0 1.013860  0.01376483
+    ## 365 basement   4.2   HENNEPIN  1.4350845       0 0.907991 -0.09652081
+    ## 728    first   7.2   ST LOUIS  1.9740810       1 0.622088 -0.47467372
+    ## 301 basement   2.5   HENNEPIN  0.9162907       0 0.907991 -0.09652081
+    ## 785    first   1.0    STEARNS  0.0000000       1 1.123440  0.11639541
+    ## 513 basement  15.7   NICOLLET  2.7536607       0 1.281520  0.24804687
+    ## 272 basement  11.2   HENNEPIN  2.4159138       0 0.907991 -0.09652081
+    ## 650 basement   5.1  SHERBURNE  1.6292405       0 0.504879 -0.68343648
+    ## 242 basement   3.2   FREEBORN  1.1631508       0 1.251330  0.22420699
+    ## 229    first   3.7    DOUGLAS  1.3083328       1 1.168490  0.15571232
+    ## 734 basement   0.8   ST LOUIS -0.2231436       0 0.622088 -0.47467372
+    ## 194 basement  21.2     DAKOTA  3.0540012       0 0.976144 -0.02414516
+    ## 173 basement   3.5     DAKOTA  1.2527630       0 0.976144 -0.02414516
+    ## 516 basement   9.7     NOBLES  2.2721259       0 1.499980  0.40545177
+    ## 885 basement   6.6 WASHINGTON  1.8870696       0 0.862876 -0.14748428
+    ## 8   basement   1.0      ANOKA  0.0000000       0 0.428565 -0.84731286
+    ## 601 basement   1.0     RAMSEY  0.0000000       0 0.658327 -0.41805351
+    ## 436 basement   3.9   LE SUEUR  1.3609766       0 1.214640  0.19444774
+    ## 264 basement   6.7    GOODHUE  1.9021075       0 1.217270  0.19661065
 
 Alternatively, we could have used the function `merge` from base R
 
@@ -187,7 +187,7 @@ Residual plot looks fine.
 plot(ppfit)
 ```
 
-![](12_3_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](12_8_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 As in the model without a predictor, in the summary we have estimates
 for two levels (or scales) of variance, county (among counties) and
@@ -397,7 +397,7 @@ radon_dat |>
          title="Partial pooling: multilevel model, max likelihood estimates")
 ```
 
-![](12_3_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](12_8_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 These estimates are not very different from the analysis that did not
 include uranium as a predictor (see previous script for M2). The
@@ -422,7 +422,7 @@ gh12.6 <-
 gh12.6
 ```
 
-![](12_3_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](12_8_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 This plot is the same as in Fig. 12.6 of G&H, except that their plot
 appears to be for the radon level on the first floor rather than the
@@ -445,98 +445,98 @@ print(summary(ppfit_bayes)[,c("mean","sd","n_eff","Rhat")], digits=3)
 ```
 
     ##                                              mean     sd n_eff  Rhat
-    ## (Intercept)                              1.46e+00 0.0385  2965 1.001
-    ## floor_x                                 -6.67e-01 0.0686  5453 1.000
-    ## logu                                     7.24e-01 0.0965  2756 1.000
-    ## b[(Intercept) county:AITKIN]            -2.28e-02 0.1465  5810 1.000
-    ## b[(Intercept) county:ANOKA]              1.02e-02 0.1053  3529 1.000
-    ## b[(Intercept) county:BECKER]             1.24e-02 0.1490  6463 1.000
-    ## b[(Intercept) county:BELTRAMI]           1.11e-01 0.1475  3441 1.000
-    ## b[(Intercept) county:BENTON]             9.73e-03 0.1512  7496 1.000
-    ## b[(Intercept) county:BIG_STONE]         -2.90e-02 0.1513  5958 0.999
-    ## b[(Intercept) county:BLUE_EARTH]         1.26e-01 0.1357  3020 1.000
-    ## b[(Intercept) county:BROWN]              4.56e-02 0.1536  5927 1.001
-    ## b[(Intercept) county:CARLTON]           -7.04e-02 0.1313  4630 1.000
-    ## b[(Intercept) county:CARVER]             7.22e-04 0.1410  5624 0.999
-    ## b[(Intercept) county:CASS]               6.66e-02 0.1483  4088 1.000
-    ## b[(Intercept) county:CHIPPEWA]           8.87e-03 0.1471  5241 1.000
-    ## b[(Intercept) county:CHISAGO]            2.07e-02 0.1371  5629 0.999
-    ## b[(Intercept) county:CLAY]               9.19e-02 0.1286  3681 1.000
-    ## b[(Intercept) county:CLEARWATER]        -1.51e-02 0.1482  6309 1.000
-    ## b[(Intercept) county:COOK]              -3.37e-02 0.1572  5292 0.999
-    ## b[(Intercept) county:COTTONWOOD]        -7.14e-02 0.1526  4507 0.999
-    ## b[(Intercept) county:CROW_WING]          2.99e-02 0.1243  5946 1.000
-    ## b[(Intercept) county:DAKOTA]            -7.68e-02 0.0860  4002 1.000
-    ## b[(Intercept) county:DODGE]              1.36e-02 0.1518  5966 1.000
-    ## b[(Intercept) county:DOUGLAS]            4.06e-02 0.1337  6362 1.000
-    ## b[(Intercept) county:FARIBAULT]         -2.16e-01 0.1831  1879 1.000
-    ## b[(Intercept) county:FILLMORE]          -3.29e-02 0.1525  5593 0.999
-    ## b[(Intercept) county:FREEBORN]           1.26e-01 0.1428  3457 0.999
-    ## b[(Intercept) county:GOODHUE]            1.20e-01 0.1285  3198 1.000
-    ## b[(Intercept) county:HENNEPIN]          -3.15e-02 0.0714  3710 1.001
-    ## b[(Intercept) county:HOUSTON]           -1.58e-02 0.1415  5719 1.000
-    ## b[(Intercept) county:HUBBARD]            6.99e-03 0.1471  5008 1.000
-    ## b[(Intercept) county:ISANTI]             1.56e-02 0.1477  6427 0.999
-    ## b[(Intercept) county:ITASCA]            -2.05e-02 0.1346  5794 1.000
-    ## b[(Intercept) county:JACKSON]            5.74e-02 0.1429  5386 0.999
-    ## b[(Intercept) county:KANABEC]           -2.65e-02 0.1468  5555 0.999
-    ## b[(Intercept) county:KANDIYOHI]          7.72e-02 0.1502  5108 0.999
-    ## b[(Intercept) county:KITTSON]            8.67e-03 0.1502  7132 0.999
-    ## b[(Intercept) county:KOOCHICHING]       -8.71e-03 0.1371  5275 1.000
-    ## b[(Intercept) county:LAC_QUI_PARLE]      1.03e-01 0.1636  3804 1.000
-    ## b[(Intercept) county:LAKE]              -1.58e-01 0.1529  2038 1.001
-    ## b[(Intercept) county:LAKE_OF_THE_WOODS]  1.29e-01 0.1624  2902 1.001
-    ## b[(Intercept) county:LE_SUEUR]           2.39e-02 0.1444  6261 1.000
-    ## b[(Intercept) county:LINCOLN]            8.20e-02 0.1514  4079 1.000
-    ## b[(Intercept) county:LYON]               5.27e-02 0.1344  5296 0.999
-    ## b[(Intercept) county:MAHNOMEN]          -1.18e-02 0.1640  5792 0.999
-    ## b[(Intercept) county:MARSHALL]           2.70e-02 0.1276  6244 1.000
-    ## b[(Intercept) county:MARTIN]            -1.25e-01 0.1527  3085 1.001
-    ## b[(Intercept) county:MCLEOD]            -9.99e-02 0.1323  3915 1.000
-    ## b[(Intercept) county:MEEKER]            -4.70e-02 0.1432  5042 1.000
-    ## b[(Intercept) county:MILLE_LACS]        -3.62e-02 0.1581  5443 0.999
-    ## b[(Intercept) county:MORRISON]          -7.06e-02 0.1422  3825 1.000
-    ## b[(Intercept) county:MOWER]              1.57e-02 0.1228  5767 1.001
-    ## b[(Intercept) county:MURRAY]             3.46e-02 0.1640  6325 0.999
-    ## b[(Intercept) county:NICOLLET]           7.80e-02 0.1511  4153 1.000
-    ## b[(Intercept) county:NOBLES]             2.06e-02 0.1533  6301 1.000
-    ## b[(Intercept) county:NORMAN]            -4.90e-02 0.1507  5511 0.999
-    ## b[(Intercept) county:OLMSTED]           -1.58e-01 0.1265  2277 0.999
-    ## b[(Intercept) county:OTTER_TAIL]         7.20e-02 0.1450  5374 0.999
-    ## b[(Intercept) county:PENNINGTON]        -4.20e-02 0.1538  5345 1.002
-    ## b[(Intercept) county:PINE]              -1.24e-01 0.1545  3098 0.999
-    ## b[(Intercept) county:PIPESTONE]          4.83e-03 0.1479  6539 1.000
-    ## b[(Intercept) county:POLK]               5.35e-03 0.1496  6256 1.000
-    ## b[(Intercept) county:POPE]              -3.02e-02 0.1620  6382 1.000
-    ## b[(Intercept) county:RAMSEY]            -4.76e-03 0.1052  4675 1.000
-    ## b[(Intercept) county:REDWOOD]            4.32e-02 0.1463  5087 0.999
-    ## b[(Intercept) county:RENVILLE]          -9.58e-03 0.1501  6371 0.999
-    ## b[(Intercept) county:RICE]               7.21e-02 0.1315  5201 0.999
-    ## b[(Intercept) county:ROCK]              -4.72e-02 0.1580  5235 1.000
-    ## b[(Intercept) county:ROSEAU]             1.16e-01 0.1301  3476 1.000
-    ## b[(Intercept) county:SCOTT]              9.52e-02 0.1259  3530 1.000
-    ## b[(Intercept) county:SHERBURNE]          2.56e-02 0.1337  6538 0.999
-    ## b[(Intercept) county:SIBLEY]            -5.97e-02 0.1489  4625 1.000
-    ## b[(Intercept) county:ST_LOUIS]          -2.05e-01 0.0898  1398 1.001
-    ## b[(Intercept) county:STEARNS]           -3.25e-02 0.1054  5754 1.000
-    ## b[(Intercept) county:STEELE]            -2.50e-02 0.1314  5795 0.999
-    ## b[(Intercept) county:STEVENS]           -3.46e-03 0.1569  6436 1.000
-    ## b[(Intercept) county:SWIFT]             -1.05e-01 0.1580  2947 1.001
-    ## b[(Intercept) county:TODD]               3.20e-02 0.1459  5359 1.000
-    ## b[(Intercept) county:TRAVERSE]           2.51e-02 0.1515  5551 1.000
-    ## b[(Intercept) county:WABASHA]            5.77e-02 0.1356  5323 1.001
-    ## b[(Intercept) county:WADENA]             5.26e-02 0.1470  6376 1.000
-    ## b[(Intercept) county:WASECA]            -1.55e-01 0.1700  2311 1.000
-    ## b[(Intercept) county:WASHINGTON]        -2.08e-02 0.0932  5419 0.999
-    ## b[(Intercept) county:WATONWAN]           1.29e-01 0.1635  3403 1.000
-    ## b[(Intercept) county:WILKIN]             2.40e-02 0.1608  6814 0.999
-    ## b[(Intercept) county:WINONA]            -6.52e-02 0.1265  5359 1.000
-    ## b[(Intercept) county:WRIGHT]             8.31e-02 0.1293  4028 1.000
-    ## b[(Intercept) county:YELLOW_MEDICINE]   -4.57e-02 0.1569  5057 1.000
-    ## sigma                                    7.59e-01 0.0178  3967 0.999
-    ## Sigma[county:(Intercept),(Intercept)]    2.69e-02 0.0172   938 1.002
-    ## mean_PPD                                 1.22e+00 0.0353  4162 1.000
-    ## log-posterior                           -1.18e+03 9.5697   741 1.003
+    ## (Intercept)                              1.47e+00 0.0400  3203 1.000
+    ## floor_x                                 -6.69e-01 0.0680  5430 1.000
+    ## logu                                     7.21e-01 0.0952  3281 1.000
+    ## b[(Intercept) county:AITKIN]            -2.41e-02 0.1505  5441 0.999
+    ## b[(Intercept) county:ANOKA]              5.75e-03 0.1034  3534 1.000
+    ## b[(Intercept) county:BECKER]             1.42e-02 0.1549  5516 0.999
+    ## b[(Intercept) county:BELTRAMI]           1.12e-01 0.1498  3800 1.000
+    ## b[(Intercept) county:BENTON]             6.53e-03 0.1464  5273 1.000
+    ## b[(Intercept) county:BIG_STONE]         -2.73e-02 0.1532  5548 1.000
+    ## b[(Intercept) county:BLUE_EARTH]         1.26e-01 0.1326  3495 1.001
+    ## b[(Intercept) county:BROWN]              4.72e-02 0.1535  5809 1.000
+    ## b[(Intercept) county:CARLTON]           -6.71e-02 0.1375  4978 1.000
+    ## b[(Intercept) county:CARVER]            -7.48e-04 0.1430  5594 1.000
+    ## b[(Intercept) county:CASS]               6.57e-02 0.1453  5130 1.000
+    ## b[(Intercept) county:CHIPPEWA]           1.29e-02 0.1566  6237 1.000
+    ## b[(Intercept) county:CHISAGO]            1.82e-02 0.1433  6271 1.000
+    ## b[(Intercept) county:CLAY]               9.55e-02 0.1305  3989 1.000
+    ## b[(Intercept) county:CLEARWATER]        -1.45e-02 0.1475  6194 1.000
+    ## b[(Intercept) county:COOK]              -3.63e-02 0.1549  5642 0.999
+    ## b[(Intercept) county:COTTONWOOD]        -7.31e-02 0.1549  4942 1.000
+    ## b[(Intercept) county:CROW_WING]          2.89e-02 0.1298  6125 0.999
+    ## b[(Intercept) county:DAKOTA]            -8.08e-02 0.0884  4507 1.000
+    ## b[(Intercept) county:DODGE]              1.64e-02 0.1479  6292 0.999
+    ## b[(Intercept) county:DOUGLAS]            4.08e-02 0.1348  5588 1.000
+    ## b[(Intercept) county:FARIBAULT]         -2.22e-01 0.1776  2072 1.000
+    ## b[(Intercept) county:FILLMORE]          -3.50e-02 0.1582  5446 1.000
+    ## b[(Intercept) county:FREEBORN]           1.30e-01 0.1414  2837 1.000
+    ## b[(Intercept) county:GOODHUE]            1.25e-01 0.1342  3413 1.001
+    ## b[(Intercept) county:HENNEPIN]          -3.40e-02 0.0723  4264 1.000
+    ## b[(Intercept) county:HOUSTON]           -1.43e-02 0.1453  5566 1.000
+    ## b[(Intercept) county:HUBBARD]            3.48e-03 0.1440  6533 1.000
+    ## b[(Intercept) county:ISANTI]             1.44e-02 0.1547  6271 1.000
+    ## b[(Intercept) county:ITASCA]            -2.15e-02 0.1299  4983 1.000
+    ## b[(Intercept) county:JACKSON]            6.01e-02 0.1509  4443 1.000
+    ## b[(Intercept) county:KANABEC]           -3.07e-02 0.1494  6059 1.000
+    ## b[(Intercept) county:KANDIYOHI]          7.83e-02 0.1537  3771 1.000
+    ## b[(Intercept) county:KITTSON]            9.86e-03 0.1479  5469 0.999
+    ## b[(Intercept) county:KOOCHICHING]       -9.43e-03 0.1473  5761 1.000
+    ## b[(Intercept) county:LAC_QUI_PARLE]      1.06e-01 0.1634  3353 1.001
+    ## b[(Intercept) county:LAKE]              -1.63e-01 0.1512  3225 1.001
+    ## b[(Intercept) county:LAKE_OF_THE_WOODS]  1.33e-01 0.1620  3250 1.000
+    ## b[(Intercept) county:LE_SUEUR]           2.62e-02 0.1457  5860 1.000
+    ## b[(Intercept) county:LINCOLN]            8.04e-02 0.1508  4090 1.000
+    ## b[(Intercept) county:LYON]               5.67e-02 0.1433  5982 1.000
+    ## b[(Intercept) county:MAHNOMEN]          -1.44e-02 0.1630  6369 1.000
+    ## b[(Intercept) county:MARSHALL]           2.93e-02 0.1335  5341 1.000
+    ## b[(Intercept) county:MARTIN]            -1.30e-01 0.1521  3702 1.002
+    ## b[(Intercept) county:MCLEOD]            -1.05e-01 0.1292  3873 1.000
+    ## b[(Intercept) county:MEEKER]            -5.09e-02 0.1467  5873 1.000
+    ## b[(Intercept) county:MILLE_LACS]        -4.06e-02 0.1572  5978 0.999
+    ## b[(Intercept) county:MORRISON]          -7.02e-02 0.1327  5032 1.000
+    ## b[(Intercept) county:MOWER]              1.29e-02 0.1225  7030 0.999
+    ## b[(Intercept) county:MURRAY]             3.53e-02 0.1633  4635 1.000
+    ## b[(Intercept) county:NICOLLET]           7.73e-02 0.1503  4571 0.999
+    ## b[(Intercept) county:NOBLES]             1.91e-02 0.1532  5449 1.000
+    ## b[(Intercept) county:NORMAN]            -5.17e-02 0.1526  4922 1.000
+    ## b[(Intercept) county:OLMSTED]           -1.62e-01 0.1238  2891 1.001
+    ## b[(Intercept) county:OTTER_TAIL]         7.25e-02 0.1384  4505 1.000
+    ## b[(Intercept) county:PENNINGTON]        -4.03e-02 0.1514  5695 0.999
+    ## b[(Intercept) county:PINE]              -1.25e-01 0.1566  3862 1.000
+    ## b[(Intercept) county:PIPESTONE]          5.41e-03 0.1467  6283 1.000
+    ## b[(Intercept) county:POLK]               7.10e-03 0.1510  6153 1.000
+    ## b[(Intercept) county:POPE]              -3.47e-02 0.1565  5228 1.000
+    ## b[(Intercept) county:RAMSEY]            -7.30e-03 0.1041  5143 0.999
+    ## b[(Intercept) county:REDWOOD]            4.67e-02 0.1460  5401 1.000
+    ## b[(Intercept) county:RENVILLE]          -9.79e-03 0.1507  5879 0.999
+    ## b[(Intercept) county:RICE]               7.34e-02 0.1324  5359 0.999
+    ## b[(Intercept) county:ROCK]              -4.56e-02 0.1549  4599 1.000
+    ## b[(Intercept) county:ROSEAU]             1.18e-01 0.1294  3769 1.000
+    ## b[(Intercept) county:SCOTT]              9.72e-02 0.1328  3980 1.000
+    ## b[(Intercept) county:SHERBURNE]          2.96e-02 0.1375  5564 0.999
+    ## b[(Intercept) county:SIBLEY]            -6.21e-02 0.1492  4796 0.999
+    ## b[(Intercept) county:ST_LOUIS]          -2.10e-01 0.0890  1767 1.002
+    ## b[(Intercept) county:STEARNS]           -3.32e-02 0.1081  5234 1.000
+    ## b[(Intercept) county:STEELE]            -2.33e-02 0.1328  6071 0.999
+    ## b[(Intercept) county:STEVENS]            9.52e-04 0.1603  7096 1.000
+    ## b[(Intercept) county:SWIFT]             -1.10e-01 0.1542  3628 1.000
+    ## b[(Intercept) county:TODD]               3.37e-02 0.1582  6734 0.999
+    ## b[(Intercept) county:TRAVERSE]           2.34e-02 0.1508  5415 0.999
+    ## b[(Intercept) county:WABASHA]            5.59e-02 0.1413  5221 1.000
+    ## b[(Intercept) county:WADENA]             5.00e-02 0.1449  5050 1.000
+    ## b[(Intercept) county:WASECA]            -1.60e-01 0.1739  2747 1.000
+    ## b[(Intercept) county:WASHINGTON]        -2.46e-02 0.0919  5610 0.999
+    ## b[(Intercept) county:WATONWAN]           1.29e-01 0.1648  3010 1.000
+    ## b[(Intercept) county:WILKIN]             2.59e-02 0.1594  6088 1.000
+    ## b[(Intercept) county:WINONA]            -6.38e-02 0.1279  4919 1.000
+    ## b[(Intercept) county:WRIGHT]             8.51e-02 0.1284  4868 0.999
+    ## b[(Intercept) county:YELLOW_MEDICINE]   -4.57e-02 0.1587  4929 1.000
+    ## sigma                                    7.59e-01 0.0183  4722 0.999
+    ## Sigma[county:(Intercept),(Intercept)]    2.75e-02 0.0167  1142 1.002
+    ## mean_PPD                                 1.22e+00 0.0354  5028 0.999
+    ## log-posterior                           -1.18e+03 9.2298   643 1.007
 
 We see that the `Rhat`s are all close to 1, suggesting the chains have
 converged, and the effective number of replicates `n_eff` is high or
@@ -715,7 +715,7 @@ gh12.6_bayes <-
 grid.arrange(gh12.6, gh12.6_bayes, nrow = 1)
 ```
 
-![](12_3_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](12_8_radon_multilevel_M3_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 Once again, the maximum likelihood and Bayesian model estimates are very
 similar. However, the Bayesian model suggests slightly higher
