@@ -482,8 +482,41 @@ preds |>
 This is substantially similar to the inference from our `ulam` script
 and the frequentist analysis. However, the regression intervals and
 prediction intervals are slightly narrower, presumably because the
-default priors are a little bit informative. We’ll look at the priors
-next.
+default priors are a little bit informative.
+
+To derive the differences between forest and bog across latitude using
+the output from the `posterior_linpred` convenience function we have to
+consider how we set up the `newd` dataframe. We asked for 50 increments
+of bog across latitude followed by 50 increments of forest. So to obtain
+derived samples of the difference between forest and bog we’ll subtract
+the first 50 columns from the second 50 columns of the `pmu` matrix.
+
+``` r
+diff <- pmu[,51:100] - pmu[,1:50]
+diff_mn <- colMeans(diff)
+n <- ncol(diff)
+diff_cpi <- data.frame(difflo95=rep(NA,n), diffhi95=rep(NA,n))
+for ( i in 1:n ) {
+    diff_cpi[i,] <- quantile(diff[,i], prob=c(0.025,0.975))
+}
+diff_df <- data.frame(cbind(diff_mn, diff_cpi, latitude=newd$latitude[1:50]))
+```
+
+Now we can plot the difference as a function of latitude.
+
+``` r
+diff_df |> 
+    ggplot() +
+    geom_ribbon(mapping=aes(x=latitude, ymin=difflo95, ymax=diffhi95), alpha=0.2) +
+    geom_line(mapping=aes(x=latitude, y=diff_mn)) +
+    coord_cartesian(ylim=c(0,8)) +
+    xlab("Latitude (degrees north)") +
+    ylab("Difference in species richness (forest - bog)")
+```
+
+![](11_6_ants_bayes_GLM_rstanarm_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+
+We’ll look at the priors next.
 
 ## Summary
 
