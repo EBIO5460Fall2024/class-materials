@@ -46,7 +46,7 @@ Deviations
 What should the report include?
 1. Exploratory Data Analysis (EDA)
 2. Sketch/diagram of the data structure
-3. The mathematical model. Should be written in latex and displayed as equations in GitHub markdown. 
+3. The mathematical model. Should be written in latex and displayed as equations in GitHub markdown.
 4. Research the default priors for your model in the `rstanarm` documentation. Give the exact parameter values for the priors (e.g. $\sigma$ = 2.5). **Justify these choices** or any deviations you made from the defaults.
 5. Analysis: see below.
 
@@ -56,20 +56,24 @@ What should the report include?
 #### Analysis
 What should the analysis include?
 
-1. Model fits
-2. Model checks (do **and comment on** each of the following)
+1. Data simulation. Simulate data from the model then fit the model to the simulated data.
+   * Does everything make sense?
+   * Do you understand the data generating process?
+   * Does the training algorithm recover the known parameters?
+2. Model fits for the real data.
+3. Model checks (do **and comment on** each of the following)
   * Has the algorithm converged? (e.g. check MCMC chains, R_hat, n_eff)
   * Visualize the model with the data. Does the fitted model represent the data?
   * Conduct posterior predictive checks (Bayesian) or diagnostic checks (Frequentist)
   * Are assumptions met? (e.g. Normality, symmetry, constant variance)
   * Are there any exceptional cases? (e.g. outliers, influence, leverage)
   * Does everything make sense? (e.g. parameter estimates)
-3. Model inferences for parameters or predictions **that answer the scientific question**, preferably presented graphically. Don't just include a bunch of random output. Present the inferences that are relevant to the question. **Depending on the question**, these might include:
+4. Model inferences for parameters or predictions **that answer the scientific question**, preferably presented graphically. Don't just include a bunch of random output. Present the inferences that are relevant to the question. **Depending on the question**, these might include:
   * Posterior distributions
   * Point estimates (points, curves, or surfaces) with uncertainty intervals
   * Hypothesis tests
   * Predictive performance
-4. Combine statistical inference with scientific reasoning to form conclusions about the scientific questions.
+5. Combine statistical inference with scientific reasoning to form conclusions about the scientific questions.
 
 
 
