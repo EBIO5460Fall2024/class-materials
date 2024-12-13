@@ -36,3 +36,22 @@ Below is a running checklist of all the homework marked as **push to GitHub** th
 - [ ] week 9 Rosenbluth algorithm submitted in `.R` and `.md` formats
 - [ ] Week 10 your simple linear dataset model checking in `.R` and `.md`
 - [ ] Week 10 individual project preliminary ideas
+- [ ] Week 12 individual project proposal
+
+
+
+Organized?
+
+
+
+**Individual project report** (see [00_individual_project.md](00_individual_project.md) for details)
+
+- [ ] Sketch (incl spatial scales of response, predictor, and grouping variables)
+- [ ] EDA
+- [ ] Model equations (math) in latex
+- [ ] Data simulation (with model fitted to simulated data)
+- [ ] Default prior research and justification
+- [ ] Analysis: model fits
+- [ ] Analysis: model checks
+- [ ] Analysis: model inferences
+- [ ] Analysis: conclusions

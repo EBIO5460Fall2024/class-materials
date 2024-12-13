@@ -44,10 +44,10 @@ Deviations
 "Report" merely means your analysis with comments but including the five components below. It doesn't mean intro, methods, results etc. Neither is it a formal "results" write up. This would be the code/report that you might make available on GitHub or Figshare or Dryad to accompany your paper. Or it might be for your future self. If you have extensive EDA, it's probably neater if you split the script/report into two: one for EDA and one for the rest.
 
 What should the report include?
-1. Exploratory Data Analysis (EDA)
-2. Sketch/diagram of the data structure
+1. Sketch/diagram of the data structure
+2. Exploratory Data Analysis (EDA)
 3. The mathematical model. Should be written in latex and displayed as equations in GitHub markdown.
-4. Research the default priors for your model in the `rstanarm` documentation. Give the exact parameter values for the priors (e.g. $\sigma$ = 2.5). **Justify these choices** or any deviations you made from the defaults.
+4. If you use `rstanarm` for fitting, research the default priors for your model in the documentation. Give the exact parameter values for the priors (e.g. $\sigma$ = 2.5). **Justify these choices** or any deviations you made from the defaults. This is a necessary part of writing a paper when you used a Bayesian model.
 5. Analysis: see below.
 
 
@@ -59,7 +59,7 @@ What should the analysis include?
 1. Data simulation. Simulate data from the model then fit the model to the simulated data.
    * Does everything make sense?
    * Do you understand the data generating process?
-   * Does the training algorithm recover the known parameters?
+   * Does the training algorithm recover the known parameters (order of magnitude)?
 2. Model fits for the real data.
 3. Model checks (do **and comment on** each of the following)
   * Has the algorithm converged? (e.g. check MCMC chains, R_hat, n_eff)
